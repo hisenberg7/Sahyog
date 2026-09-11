@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+from urllib.parse import urlparse, unquote
+
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,6 +78,17 @@ DB_ENGINE = os.getenv(
     "sqlite3"
 ).strip().lower()
 
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+
+# Render provides PostgreSQL as DATABASE_URL.
+# If DATABASE_URL exists, use it automatically.
+if DATABASE_URL:
+    parsed_db = urlparse(DATABASE_URL)
+
+    db_scheme = parsed_db.scheme.lower()
+    if db_scheme in ("postgres", "postgresql"):
+        DB_ENGINE = "postgresql"
+
 if DB_ENGINE == "oracle":
     DATABASES = {
         "default": {
@@ -90,31 +103,55 @@ if DB_ENGINE == "oracle":
     }
 
 elif DB_ENGINE == "postgresql":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv(
-                "POSTGRES_DB",
-                "sahyog_db"
-            ),
-            "USER": os.getenv(
-                "POSTGRES_USER",
-                "sahyog_user"
-            ),
-            "PASSWORD": os.getenv(
-                "POSTGRES_PASSWORD",
-                "Sahyog@2026"
-            ),
-            "HOST": os.getenv(
-                "POSTGRES_HOST",
-                "localhost"
-            ),
-            "PORT": os.getenv(
-                "POSTGRES_PORT",
-                "5432"
-            ),
+
+    if DATABASE_URL:
+        parsed_db = urlparse(DATABASE_URL)
+
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": unquote(
+                    parsed_db.path.lstrip("/")
+                ),
+                "USER": unquote(
+                    parsed_db.username or ""
+                ),
+                "PASSWORD": unquote(
+                    parsed_db.password or ""
+                ),
+                "HOST": parsed_db.hostname or "localhost",
+                "PORT": str(
+                    parsed_db.port or 5432
+                ),
+            }
         }
-    }
+
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": os.getenv(
+                    "POSTGRES_DB",
+                    "sahyog_db"
+                ),
+                "USER": os.getenv(
+                    "POSTGRES_USER",
+                    "sahyog_user"
+                ),
+                "PASSWORD": os.getenv(
+                    "POSTGRES_PASSWORD",
+                    "Sahyog@2026"
+                ),
+                "HOST": os.getenv(
+                    "POSTGRES_HOST",
+                    "localhost"
+                ),
+                "PORT": os.getenv(
+                    "POSTGRES_PORT",
+                    "5432"
+                ),
+            }
+        }
 
 else:
     DATABASES = {
