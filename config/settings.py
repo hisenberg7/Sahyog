@@ -238,14 +238,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # ============================================================
-# EMAIL / GMAIL SMTP
+# EMAIL / GMAIL SMTP & BREVO
 # ============================================================
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend"
+)
 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "5"))
 
 EMAIL_HOST_USER = os.getenv(
     "EMAIL_HOST_USER",
@@ -258,6 +262,11 @@ EMAIL_HOST_PASSWORD = os.getenv(
 )
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Brevo (formerly Sendinblue) API (HTTP over Port 443 - works on Render without custom domain)
+BREVO_API_KEY = os.getenv("BREVO_API_KEY", "").strip()
+BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL", "").strip()
+BREVO_SENDER_NAME = os.getenv("BREVO_SENDER_NAME", "Sahyog").strip()
 
 
 # ============================================================

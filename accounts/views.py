@@ -8,12 +8,15 @@ from django.urls import reverse
 from django.utils import timezone
 
 from datetime import timedelta
+import logging
 import secrets
 
 import requests
 
 from .forms import RegistrationForm
 from .models import UserProfile
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================
@@ -31,6 +34,8 @@ def _send_email_otp(request, email):
     """
     Generate and send a 6-digit OTP to the user's email.
     OTP remains valid for 5 minutes.
+    If BREVO_API_KEY is configured, sends via Brevo REST API (HTTPS).
+    Otherwise falls back to Django's standard send_mail backend.
     """
 
     otp = _generate_email_otp()
@@ -42,20 +47,72 @@ def _send_email_otp(request, email):
     ).isoformat()
     request.session["email_otp_attempts"] = 0
 
-    send_mail(
-        subject="Sahyog Email Verification OTP",
-        message=(
-            f"Hello,\n\n"
-            f"Your Sahyog verification OTP is: {otp}\n\n"
-            f"This OTP is valid for 5 minutes.\n\n"
-            f"If you did not request this OTP, please ignore this email.\n\n"
-            f"Regards,\n"
-            f"Sahyog Team"
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[email],
-        fail_silently=False,
-    )
+    brevo_api_key = str(getattr(settings, "BREVO_API_KEY", "") or "").strip()
+
+    breakpoint()
+
+    if brevo_api_key:
+        sender_email = str(
+            getattr(settings, "BREVO_SENDER_EMAIL", "")
+            or getattr(settings, "EMAIL_HOST_USER", "")
+            or ""
+        ).strip().strip('"').strip("'")
+        sender_name = str(getattr(settings, "BREVO_SENDER_NAME", "") or "Sahyog").strip()
+
+        if not sender_email:
+            raise RuntimeError("BREVO_SENDER_EMAIL or EMAIL_HOST_USER must be configured.")
+
+        response = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "accept": "application/json",
+                "api-key": brevo_api_key,
+                "content-type": "application/json",
+            },
+            json={
+                "sender": {
+                    "name": sender_name,
+                    "email": sender_email,
+                },
+                "to": [
+                    {
+                        "email": email,
+                    }
+                ],
+                "subject": "Sahyog Email Verification OTP",
+                "textContent": (
+                    f"Hello,\n\n"
+                    f"Your Sahyog verification OTP is: {otp}\n\n"
+                    f"This OTP is valid for 5 minutes.\n\n"
+                    f"If you did not request this OTP, please ignore this email.\n\n"
+                    f"Regards,\n"
+                    f"Sahyog Team"
+                ),
+            },
+            timeout=10,
+        )
+        if response.status_code not in (200, 201, 202):
+            logger.error(
+                "Brevo API error [%s]: %s",
+                response.status_code,
+                response.text,
+            )
+            raise RuntimeError(f"Brevo email failed: {response.text}")
+    else:
+        send_mail(
+            subject="Sahyog Email Verification OTP",
+            message=(
+                f"Hello,\n\n"
+                f"Your Sahyog verification OTP is: {otp}\n\n"
+                f"This OTP is valid for 5 minutes.\n\n"
+                f"If you did not request this OTP, please ignore this email.\n\n"
+                f"Regards,\n"
+                f"Sahyog Team"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
 
     return otp
 
@@ -110,7 +167,8 @@ def register(request):
 
                 return redirect("verify_email_otp")
 
-            except Exception:
+            except Exception as e:
+                logger.exception("Failed to send verification email to %s: %s", email, e)
                 messages.error(
                     request,
                     "We could not send the verification email right now. Please try again."
@@ -373,7 +431,8 @@ def resend_email_otp(request):
             f"A new OTP has been sent to {email}."
         )
 
-    except Exception:
+    except Exception as e:
+        logger.exception("Failed to resend OTP email to %s: %s", email, e)
         messages.error(
             request,
             "Could not send a new OTP right now. Please try again."
