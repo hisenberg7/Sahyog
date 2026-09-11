@@ -49,8 +49,6 @@ def _send_email_otp(request, email):
 
     brevo_api_key = str(getattr(settings, "BREVO_API_KEY", "") or "").strip()
 
-    breakpoint()
-
     if brevo_api_key:
         sender_email = str(
             getattr(settings, "BREVO_SENDER_EMAIL", "")
