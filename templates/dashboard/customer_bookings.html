@@ -1,0 +1,1210 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+{% trans "My Bookings" %} — Sahyog
+{% endblock %}
+
+
+{% block extra_head %}
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="dash-page bookings-page">
+
+<div class="container">
+
+
+<!-- PAGE HEADER -->
+
+<div class="d-flex align-items-center gap-3 mb-4">
+
+<a href="{% url 'customer_dashboard' %}"
+   class="btn btn-light rounded-3"
+   title="{% trans 'Back to Dashboard' %}">
+
+    <i class="bi bi-arrow-left"></i>
+
+</a>
+
+
+<div>
+
+<span class="eyebrow">
+    {% trans "Customer workspace" %}
+</span>
+
+
+<h1 class="page-title mb-0">
+    {% trans "My Bookings" %}
+</h1>
+
+
+<p class="text-muted mb-0">
+    {% trans "View and manage the services you have booked." %}
+</p>
+
+</div>
+
+</div>
+
+
+
+{% if bookings %}
+
+
+{% for booking in bookings %}
+
+<article class="booking-card mb-3">
+
+
+<!-- BOOKING HEADER -->
+
+<div class="d-flex flex-column flex-md-row
+            justify-content-between
+            align-items-md-start
+            gap-3">
+
+
+<div>
+
+<div class="d-flex flex-wrap
+            align-items-center
+            gap-2">
+
+
+<h4 class="mb-0 booking-service">
+    {{ booking.service.name }}
+</h4>
+
+
+{% if booking.is_emergency %}
+
+<span class="emergency-tag">
+
+    <i class="bi bi-lightning-charge-fill"></i>
+
+    {% trans "Emergency" %}
+
+</span>
+
+{% endif %}
+
+
+</div>
+
+
+<div class="booking-category">
+
+    {{ booking.service.get_category_display }}
+
+</div>
+
+
+<div class="booking-id">
+
+    {% trans "Booking" %} #{{ booking.id }}
+
+</div>
+
+</div>
+
+
+
+<!-- STATUS -->
+
+<span class="status-badge status-{{ booking.status }}">
+
+
+{% if booking.status == 'pending' %}
+
+<i class="bi bi-hourglass-split"></i>
+{% trans "Pending" %}
+
+
+{% elif booking.status == 'accepted' %}
+
+<i class="bi bi-check-circle"></i>
+{% trans "Accepted" %}
+
+
+{% elif booking.status == 'on_the_way' %}
+
+<i class="bi bi-truck"></i>
+{% trans "On the Way" %}
+
+
+{% elif booking.status == 'arrived' %}
+
+<i class="bi bi-geo-alt-fill"></i>
+{% trans "Arrived" %}
+
+
+{% elif booking.status == 'in_progress' %}
+
+<i class="bi bi-tools"></i>
+{% trans "In Progress" %}
+
+
+{% elif booking.status == 'completed' %}
+
+<i class="bi bi-check2-all"></i>
+{% trans "Completed" %}
+
+
+{% elif booking.status == 'cancelled' %}
+
+<i class="bi bi-x-circle"></i>
+{% trans "Cancelled" %}
+
+
+{% else %}
+
+{{ booking.status|title }}
+
+{% endif %}
+
+</span>
+
+</div>
+
+
+
+<!-- DESCRIPTION -->
+
+{% if booking.service.description %}
+
+<p class="booking-description mt-3">
+
+    {{ booking.service.description|truncatechars:180 }}
+
+</p>
+
+{% endif %}
+
+
+
+<!-- BOOKING INFO -->
+
+<div class="booking-info-grid">
+
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Provider" %}
+</div>
+
+<div class="info-value">
+    {{ booking.worker.user.get_full_name|default:booking.worker.user.username }}
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Skill" %}
+</div>
+
+<div class="info-value">
+    {{ booking.worker.skill|default:"Professional Service Provider" }}
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Date & Time" %}
+</div>
+
+<div class="info-value">
+
+    {{ booking.scheduled_date }}
+
+    <span class="text-secondary">
+        •
+    </span>
+
+    {{ booking.scheduled_time }}
+
+</div>
+
+</div>
+
+
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Amount" %}
+</div>
+
+<div class="info-value">
+
+    ₹{{ booking.amount }}
+
+</div>
+
+</div>
+
+
+
+{% if booking.worker.phone %}
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Phone" %}
+</div>
+
+<div class="info-value">
+
+    {{ booking.worker.phone }}
+
+</div>
+
+</div>
+
+{% endif %}
+
+
+
+<div class="info-item">
+
+<div class="info-label">
+    {% trans "Address" %}
+</div>
+
+<div class="info-value">
+
+    {{ booking.address|truncatechars:100 }}
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     LIVE TRACKING
+========================= -->
+
+{% if booking.status == 'on_the_way' or booking.status == 'arrived' %}
+
+<div class="live-tracking-card mt-3"
+     data-live-tracking
+     data-booking-id="{{ booking.id }}"
+     data-location-url="{% url 'services:worker_location_api' booking.id %}">
+
+
+<div class="d-flex justify-content-between
+            align-items-start
+            gap-3
+            mb-3">
+
+
+<div>
+
+<div class="d-flex align-items-center gap-2">
+
+<i class="bi bi-broadcast-pin text-success"></i>
+
+<strong>
+    {% trans "Live Worker Location" %}
+</strong>
+
+</div>
+
+
+<small class="text-muted live-status">
+
+    {% trans "Connecting to live location…" %}
+
+</small>
+
+</div>
+
+
+<span class="live-dot"></span>
+
+</div>
+
+
+
+<!-- MAP -->
+
+<div class="live-map"
+     id="live-map-{{ booking.id }}">
+</div>
+
+
+
+<!-- METRICS -->
+
+<div class="row g-2 mt-2">
+
+
+<div class="col-6">
+
+<div class="tracking-metric">
+
+<small>
+    {% trans "Distance" %}
+</small>
+
+<strong class="live-distance">
+    —
+</strong>
+
+</div>
+
+</div>
+
+
+
+<div class="col-6">
+
+<div class="tracking-metric">
+
+<small>
+    {% trans "Approx. ETA" %}
+</small>
+
+<strong class="live-eta">
+    —
+</strong>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<small class="text-muted
+              d-block
+              mt-2
+              live-updated">
+</small>
+
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =========================
+     BOOKING ACTION / STATUS
+========================= -->
+
+<div class="booking-actions mt-3">
+
+
+{% if booking.status == 'pending' %}
+
+<div class="alert alert-warning mb-0">
+
+<i class="bi bi-hourglass-split me-2"></i>
+
+{% trans "Waiting for the service provider to accept your booking." %}
+
+</div>
+
+
+
+{% elif booking.status == 'accepted' %}
+
+<div class="alert alert-info mb-0">
+
+<i class="bi bi-check-circle me-2"></i>
+
+{% trans "Your booking has been accepted by the service provider." %}
+
+</div>
+
+
+
+{% elif booking.status == 'on_the_way' %}
+
+<div class="alert alert-info mb-0">
+
+<i class="bi bi-truck me-2"></i>
+
+{% trans "Your worker is on the way. You can follow their live location above." %}
+
+</div>
+
+
+
+{% elif booking.status == 'arrived' %}
+
+<div class="alert alert-success mb-0">
+
+<i class="bi bi-geo-alt-fill me-2"></i>
+
+{% trans "Your worker has arrived." %}
+
+</div>
+
+
+
+{% elif booking.status == 'in_progress' %}
+
+<div class="alert alert-primary mb-0">
+
+<i class="bi bi-tools me-2"></i>
+
+{% trans "Your service is currently in progress." %}
+
+</div>
+
+
+
+{% elif booking.status == 'completed' %}
+
+
+{% if booking.payment %}
+
+
+{% if booking.payment.status == 'verified' %}
+
+<div class="alert alert-success mb-0">
+
+<i class="bi bi-patch-check-fill me-2"></i>
+
+{% trans "Payment verified successfully. Thank you!" %}
+
+</div>
+
+
+
+{% elif booking.payment.status == 'submitted' %}
+
+<div class="alert alert-warning mb-0">
+
+<i class="bi bi-hourglass-split me-2"></i>
+
+{% trans "Payment submitted successfully. Waiting for verification." %}
+
+</div>
+
+
+
+{% elif booking.payment.status == 'rejected' %}
+
+<div class="alert alert-danger mb-3">
+
+<i class="bi bi-exclamation-circle me-2"></i>
+
+{% trans "Your payment could not be verified. Please submit the payment again." %}
+
+</div>
+
+
+<div class="payment-box d-flex
+            flex-column
+            flex-sm-row
+            align-items-sm-center
+            justify-content-between
+            gap-3">
+
+
+<div>
+
+<small class="text-secondary d-block">
+
+<i class="bi bi-credit-card me-1"></i>
+
+{% trans "Payment" %}
+
+</small>
+
+
+<strong>
+    ₹{{ booking.amount }}
+</strong>
+
+
+<span class="text-secondary ms-1">
+
+    • {% trans "Payment required" %}
+
+</span>
+
+</div>
+
+
+<a href="{% url 'services:payment' booking.id %}"
+   class="btn-pay">
+
+<i class="bi bi-qr-code me-2"></i>
+
+{% trans "Pay Now" %}
+
+</a>
+
+</div>
+
+
+
+{% else %}
+
+<div class="alert alert-success mb-3">
+
+<i class="bi bi-check2-all me-2"></i>
+
+{% trans "This service has been completed successfully." %}
+
+</div>
+
+
+<div class="payment-box d-flex
+            flex-column
+            flex-sm-row
+            align-items-sm-center
+            justify-content-between
+            gap-3">
+
+
+<div>
+
+<small class="text-secondary d-block">
+
+<i class="bi bi-credit-card me-1"></i>
+
+{% trans "Payment" %}
+
+</small>
+
+
+<strong>
+    ₹{{ booking.amount }}
+</strong>
+
+
+<span class="text-secondary ms-1">
+
+    • {% trans "Payment due" %}
+
+</span>
+
+</div>
+
+
+<a href="{% url 'services:payment' booking.id %}"
+   class="btn-pay">
+
+<i class="bi bi-qr-code me-2"></i>
+
+{% trans "Pay Now" %}
+
+</a>
+
+</div>
+
+{% endif %}
+
+
+{% else %}
+
+
+<div class="alert alert-success mb-3">
+
+<i class="bi bi-check2-all me-2"></i>
+
+{% trans "This service has been completed successfully." %}
+
+</div>
+
+
+<div class="payment-box d-flex
+            flex-column
+            flex-sm-row
+            align-items-sm-center
+            justify-content-between
+            gap-3">
+
+
+<div>
+
+<small class="text-secondary d-block">
+
+<i class="bi bi-credit-card me-1"></i>
+
+{% trans "Payment" %}
+
+</small>
+
+
+<strong>
+    ₹{{ booking.amount }}
+</strong>
+
+
+<span class="text-secondary ms-1">
+
+    • {% trans "Payment due" %}
+
+</span>
+
+</div>
+
+
+<a href="{% url 'services:payment' booking.id %}"
+   class="btn-pay">
+
+<i class="bi bi-qr-code me-2"></i>
+
+{% trans "Pay Now" %}
+
+</a>
+
+</div>
+
+{% endif %}
+
+
+{% elif booking.status == 'cancelled' %}
+
+<div class="alert alert-danger mb-0">
+
+<i class="bi bi-x-circle me-2"></i>
+
+{% trans "This booking has been cancelled." %}
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+</article>
+
+{% endfor %}
+
+
+{% else %}
+
+
+<!-- EMPTY STATE -->
+
+<div class="empty-box text-center">
+
+<div class="empty-icon">
+
+<i class="bi bi-calendar-x"></i>
+
+</div>
+
+
+<h4>
+    {% trans "No bookings yet" %}
+</h4>
+
+
+<p class="text-muted mb-4">
+
+{% trans "You haven't booked any service yet." %}
+
+</p>
+
+
+<a href="{% url 'services:service_list' %}"
+   class="btn-pay">
+
+<i class="bi bi-search me-2"></i>
+
+{% trans "Explore Services" %}
+
+</a>
+
+</div>
+
+
+{% endif %}
+
+
+</div>
+
+</section>
+
+{% endblock %}
+
+
+
+<!-- =========================
+     PAGE CSS
+========================= -->
+
+{% block extra_css %}
+
+<style>
+
+.bookings-page .booking-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:23px;
+    box-shadow:0 10px 35px rgba(16,39,36,.04);
+}
+
+.bookings-page .booking-service{
+    font-weight:800;
+    color:var(--ink);
+}
+
+.bookings-page .booking-category,
+.bookings-page .booking-id{
+    font-size:.78rem;
+    color:var(--muted);
+}
+
+.bookings-page .booking-info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    margin-top:15px;
+}
+
+.bookings-page .info-item{
+    background:var(--soft);
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:11px 13px;
+}
+
+.bookings-page .info-label{
+    font-size:.66rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:3px;
+}
+
+.bookings-page .info-value{
+    font-size:.84rem;
+    font-weight:650;
+    color:var(--ink);
+    word-break:break-word;
+}
+
+.bookings-page .booking-description{
+    color:var(--muted);
+    font-size:.84rem;
+}
+
+.bookings-page .booking-actions{
+    border-top:1px solid var(--line);
+    padding-top:15px;
+}
+
+.bookings-page .payment-box{
+    border:1px solid var(--line);
+    background:var(--soft);
+    border-radius:15px;
+    padding:14px;
+}
+
+.bookings-page .empty-box{
+    background:var(--surface);
+    border:1px dashed var(--line);
+    border-radius:22px;
+    padding:60px 20px;
+    color:var(--muted);
+}
+
+.bookings-page .empty-box h4{
+    color:var(--ink);
+    font-weight:800;
+}
+
+.bookings-page .empty-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:var(--teal-soft);
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    margin:0 auto 15px;
+}
+
+.live-tracking-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:15px;
+}
+
+.live-map{
+    height:280px;
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--soft);
+    border:1px solid var(--line);
+}
+
+.tracking-metric{
+    background:var(--soft);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px 12px;
+}
+
+.tracking-metric small,
+.tracking-metric strong{
+    display:block;
+}
+
+.tracking-metric small{
+    color:var(--muted);
+    font-size:.7rem;
+}
+
+.tracking-metric strong{
+    color:var(--ink);
+    margin-top:2px;
+}
+
+.live-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 5px rgba(34,197,94,.12);
+    margin-top:5px;
+}
+
+@media(max-width:700px){
+
+    .bookings-page .booking-info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .bookings-page .booking-card{
+        padding:17px;
+    }
+
+    .live-map{
+        height:240px;
+    }
+
+}
+
+html[data-theme="dark"] .leaflet-container{
+    background:#101b19;
+}
+
+</style>
+
+{% endblock %}
+
+
+
+<!-- =========================
+     LIVE LOCATION JAVASCRIPT
+========================= -->
+
+{% block extra_js %}
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+    const cards =
+        document.querySelectorAll('[data-live-tracking]');
+
+
+    cards.forEach(function(card){
+
+        const mapEl =
+            card.querySelector('.live-map');
+
+        const statusEl =
+            card.querySelector('.live-status');
+
+        const distanceEl =
+            card.querySelector('.live-distance');
+
+        const etaEl =
+            card.querySelector('.live-eta');
+
+        const updatedEl =
+            card.querySelector('.live-updated');
+
+        const url =
+            card.dataset.locationUrl;
+
+
+        if(
+            !mapEl ||
+            !url ||
+            typeof L === 'undefined'
+        ){
+            return;
+        }
+
+
+        let map = null;
+        let workerMarker = null;
+        let customerMarker = null;
+        let poll = null;
+
+
+        function fmtDistance(km){
+
+            if(
+                km === null ||
+                km === undefined
+            ){
+                return '—';
+            }
+
+            return km < 1
+                ? Math.round(km * 1000) + ' m'
+                : km.toFixed(1) + ' km';
+
+        }
+
+
+        function fmtEta(min){
+
+            if(
+                min === null ||
+                min === undefined
+            ){
+                return '—';
+            }
+
+            return min + ' min';
+
+        }
+
+
+        function initMap(
+            lat,
+            lng,
+            clat,
+            clng
+        ){
+
+            if(!map){
+
+                const center = [lat,lng];
+
+
+                map =
+                    L.map(
+                        mapEl,
+                        {
+                            scrollWheelZoom:false
+                        }
+                    ).setView(
+                        center,
+                        14
+                    );
+
+
+                L.tileLayer(
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                        maxZoom:19,
+                        attribution:
+                            '© OpenStreetMap contributors'
+                    }
+                ).addTo(map);
+
+
+                workerMarker =
+                    L.marker(center)
+                    .addTo(map)
+                    .bindPopup(
+                        '{% trans "Worker" %}'
+                    );
+
+
+                if(
+                    clat !== null &&
+                    clng !== null
+                ){
+
+                    customerMarker =
+                        L.marker(
+                            [clat,clng]
+                        )
+                        .addTo(map)
+                        .bindPopup(
+                            '{% trans "Your location" %}'
+                        );
+
+
+                    map.fitBounds(
+                        L.latLngBounds(
+                            [
+                                center,
+                                [clat,clng]
+                            ]
+                        ),
+                        {
+                            padding:[25,25]
+                        }
+                    );
+
+                }
+
+            }
+            else{
+
+                workerMarker.setLatLng(
+                    [lat,lng]
+                );
+
+            }
+
+        }
+
+
+        async function update(){
+
+            try{
+
+                const res =
+                    await fetch(
+                        url,
+                        {
+                            headers:{
+                                'X-Requested-With':
+                                    'XMLHttpRequest'
+                            },
+                            cache:'no-store'
+                        }
+                    );
+
+
+                const data =
+                    await res.json();
+
+
+                if(!data.success){
+
+                    statusEl.textContent =
+                        '{% trans "Unable to load live location." %}';
+
+                    return;
+
+                }
+
+
+                if(
+                    data.latitude !== null &&
+                    data.longitude !== null
+                ){
+
+                    initMap(
+                        data.latitude,
+                        data.longitude,
+                        data.customer_latitude,
+                        data.customer_longitude
+                    );
+
+
+                    distanceEl.textContent =
+                        fmtDistance(
+                            data.distance_km
+                        );
+
+
+                    etaEl.textContent =
+                        fmtEta(
+                            data.eta_minutes
+                        );
+
+
+                    statusEl.textContent =
+                        data.status === 'arrived'
+                            ? '{% trans "Worker has arrived." %}'
+                            : '{% trans "Live location is updating." %}';
+
+
+                    if(data.location_updated_at){
+
+                        updatedEl.textContent =
+                            '{% trans "Last updated" %}: ' +
+                            new Date(
+                                data.location_updated_at
+                            ).toLocaleTimeString();
+
+                    }
+
+                }
+                else{
+
+                    statusEl.textContent =
+                        '{% trans "Waiting for the worker to share GPS location…" %}';
+
+                }
+
+
+                if(
+                    data.status === 'arrived' &&
+                    !data.active &&
+                    poll
+                ){
+
+                    clearInterval(poll);
+                    poll = null;
+
+                }
+
+            }
+            catch(e){
+
+                statusEl.textContent =
+                    '{% trans "Waiting for live location…" %}';
+
+            }
+
+        }
+
+
+        update();
+
+        poll =
+            setInterval(
+                update,
+                5000
+            );
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1535 @@
+{% extends "base.html" %}
+{% load service_extras %}
+
+{% block title %}Customer Dashboard — Sahyog{% endblock %}
+
+{% block extra_head %}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+    .live-tracking-card {
+        overflow: hidden;
+    }
+
+    .live-map {
+        width: 100%;
+        height: 380px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #eef2f2;
+    }
+
+    .tracking-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .tracking-stat {
+        flex: 1 1 140px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f7f9f9;
+        border: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    .tracking-stat small {
+        display: block;
+        color: #6c757d;
+        margin-bottom: 3px;
+    }
+
+    .tracking-stat strong {
+        font-size: 15px;
+    }
+
+    .tracking-live-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #16a34a;
+        display: inline-block;
+        margin-right: 6px;
+        box-shadow: 0 0 0 5px rgba(22, 163, 74, .12);
+        animation: trackingPulse 1.8s infinite;
+    }
+
+    @keyframes trackingPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(22, 163, 74, .35);
+        }
+
+        70% {
+            box-shadow: 0 0 0 7px rgba(22, 163, 74, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+        }
+    }
+
+    .worker-map-marker {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #0d9488;
+        border: 4px solid white;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+    }
+
+    .customer-map-marker {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #212529;
+        border: 4px solid white;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+    }
+
+    .tracking-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-top: 12px;
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    .tracking-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .legend-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .legend-worker {
+        background: #0d9488;
+    }
+
+    .legend-customer {
+        background: #212529;
+    }
+
+    .tracking-line {
+        stroke-dasharray: 8, 8;
+        animation: trackingLineMove 1.5s linear infinite;
+    }
+
+    @keyframes trackingLineMove {
+        to {
+            stroke-dashoffset: -16;
+        }
+    }
+
+    .tracking-waiting {
+        padding: 22px;
+        text-align: center;
+        border-radius: 14px;
+        background: #f7f9f9;
+        border: 1px dashed rgba(0, 0, 0, .12);
+    }
+
+    .tracking-waiting i {
+        font-size: 30px;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .tracking-update-time {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    @media (max-width: 576px) {
+        .live-map {
+            height: 300px;
+        }
+
+        .tracking-info {
+            gap: 8px;
+        }
+
+        .tracking-stat {
+            flex: 1 1 100%;
+        }
+    }
+    /* DYNAMIC BILLING */
+    .billing-card{margin-top:14px;padding:15px;border:1px solid rgba(13,148,136,.18);border-radius:14px;background:#f7fbfa}
+    .billing-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+    .billing-breakdown{display:grid;gap:7px}
+    .billing-line{display:flex;justify-content:space-between;gap:12px;font-size:.84rem}
+    .billing-final{margin-top:9px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08);font-size:.95rem;font-weight:800}
+    .extra-charge{margin-top:10px;padding:11px;border-radius:11px;background:white;border:1px solid rgba(0,0,0,.07)}
+    .extra-charge-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .extra-charge-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+    .billing-pending{color:#a16207;font-weight:700}.billing-approved{color:#15803d;font-weight:700}.billing-rejected{color:#b91c1c;font-weight:700}
+    html[data-theme="dark"] .billing-card{background:var(--surface);border-color:rgba(45,212,191,.18)}
+    html[data-theme="dark"] .extra-charge{background:var(--soft);border-color:var(--line)}
+    @media(max-width:576px){.billing-header,.extra-charge-top{flex-direction:column;align-items:flex-start}}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<section class="dash-page">
+
+    <div class="container">
+
+        <!-- HERO -->
+        <div class="dash-hero">
+
+            <div>
+
+                <span class="eyebrow">
+                    Customer workspace
+                </span>
+
+                <h1>
+                    What's the work you need help with,
+                    {{ user.first_name|default:user.username }}?
+                </h1>
+
+                <p>
+                    Book trusted local help and keep every job in one place.
+                </p>
+
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'services:service_list' %}"
+                    class="btn btn-primary-custom rounded-3"
+                >
+                    Find a worker
+                </a>
+
+                <a
+                    href="{% url 'customer_bookings' %}"
+                    class="btn btn-light rounded-3"
+                >
+                    All bookings
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICE CATEGORIES -->
+        <div class="category-grid mt-3">
+
+            {% for value, label in category_choices %}
+
+            <a
+                href="{% url 'services:service_list' %}?category={{ value }}"
+                class="category-pill"
+            >
+
+                <span class="category-icon sm category-{{ value }}">
+                    <i class="bi {{ value|category_icon }}"></i>
+                </span>
+
+                <span>{{ label }}</span>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- STATS -->
+        <div class="row g-3 mt-1">
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-card">
+
+                    <i class="bi bi-grid"></i>
+
+                    <strong>
+                        {{ total_bookings }}
+                    </strong>
+
+                    <span>
+                        Total bookings
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-card">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                    <strong>
+                        {{ pending_bookings }}
+                    </strong>
+
+                    <span>
+                        Awaiting worker
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-card">
+
+                    <i class="bi bi-arrow-repeat"></i>
+
+                    <strong>
+                        {{ accepted_bookings }}
+                    </strong>
+
+                    <span>
+                        Active jobs
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-card">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    <strong>
+                        {{ completed_bookings }}
+                    </strong>
+
+                    <span>
+                        Completed
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             LIVE WORKER TRACKING
+             ===================================================== -->
+
+        {% for booking in recent_bookings %}
+
+            {% if booking.status == 'on_the_way' %}
+
+            <div
+                class="panel-card live-tracking-card mt-4"
+                id="tracking-card-{{ booking.id }}"
+            >
+
+                <!-- TRACKING HEADER -->
+                <div class="panel-head">
+
+                    <div>
+
+                        <h4 class="mb-1">
+
+                            <span class="tracking-live-dot"></span>
+
+                            Worker is on the way
+
+                        </h4>
+
+                        <p class="mb-0">
+
+                            {{ booking.worker.display_name }}
+                            is travelling to your location.
+
+                        </p>
+
+                    </div>
+
+                    <span
+                        class="status-chip status-on_the_way"
+                        id="tracking-badge-{{ booking.id }}"
+                    >
+                        Live
+                    </span>
+
+                </div>
+
+
+                <!-- MAP -->
+                <div
+                    id="live-map-{{ booking.id }}"
+                    class="live-map"
+                ></div>
+
+
+                <!-- LEGEND -->
+                <div class="tracking-legend">
+
+                    <div class="tracking-legend-item">
+
+                        <span class="legend-dot legend-worker"></span>
+
+                        <span>
+                            Worker
+                        </span>
+
+                    </div>
+
+                    <div class="tracking-legend-item">
+
+                        <span class="legend-dot legend-customer"></span>
+
+                        <span>
+                            Your location
+                        </span>
+
+                    </div>
+
+                    <div class="tracking-legend-item">
+
+                        <i class="bi bi-dash-lg"></i>
+
+                        <span>
+                            Live direction
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRACKING STATS -->
+                <div class="tracking-info">
+
+                    <div class="tracking-stat">
+
+                        <small>
+                            <i class="bi bi-geo-alt me-1"></i>
+                            Distance
+                        </small>
+
+                        <strong
+                            id="distance-{{ booking.id }}"
+                        >
+                            Calculating...
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tracking-stat">
+
+                        <small>
+                            <i class="bi bi-clock me-1"></i>
+                            Approx ETA
+                        </small>
+
+                        <strong
+                            id="eta-{{ booking.id }}"
+                        >
+                            Calculating...
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tracking-stat">
+
+                        <small>
+                            <i class="bi bi-broadcast me-1"></i>
+                            Location status
+                        </small>
+
+                        <strong
+                            id="location-status-{{ booking.id }}"
+                        >
+                            Connecting...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="tracking-update-time"
+                    id="updated-time-{{ booking.id }}"
+                >
+                    Waiting for first live location...
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <div class="row g-4 mt-2">
+
+            <!-- RECENT BOOKINGS -->
+            <div class="col-xl-8">
+
+                <div class="panel-card">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <h4>
+                                Recent bookings
+                            </h4>
+
+                            <p>
+                                Track your service requests.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {% for booking in recent_bookings %}
+
+                    <div class="booking-row">
+
+                        <div class="category-icon sm">
+
+                            <i class="bi bi-tools"></i>
+
+                        </div>
+
+
+                        <div class="flex-grow-1">
+
+                            <strong>
+                                {{ booking.service.name }}
+                            </strong>
+
+                            <div class="small text-muted">
+
+                                {{ booking.worker.display_name }}
+                                · {{ booking.scheduled_date }}
+                                · {{ booking.scheduled_time }}
+
+                            </div>
+
+
+                            {% if booking.is_emergency %}
+
+                            <span class="emergency-tag">
+                                Emergency
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="text-end">
+
+                            <span
+                                class="status-chip status-{{ booking.status }}"
+                            >
+                                {{ booking.status|title }}
+                            </span>
+
+                            <div class="fw-bold mt-1">
+                                ₹{{ booking.amount }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                                            <!-- DYNAMIC BILLING -->
+                        <div class="billing-card">
+                            <div class="billing-header">
+                                <div>
+                                    <strong><i class="bi bi-receipt-cutoff me-1"></i>Bill breakdown</strong>
+                                    <div class="small text-muted">Review any additional charges below.</div>
+                                </div>
+                                <strong>₹{{ booking.amount }}</strong>
+                            </div>
+                            <div class="billing-breakdown">
+                                <div class="billing-line"><span>Base service</span><strong>₹{{ booking.base_amount }}</strong></div>
+                                {% if booking.emergency_fee %}
+                                <div class="billing-line"><span>Emergency fee</span><strong>₹{{ booking.emergency_fee }}</strong></div>
+                                {% endif %}
+                                <div class="billing-line"><span>Approved extras</span><strong>₹{{ booking.approved_extra_amount }}</strong></div>
+                                <div class="billing-line billing-final"><span>Final payable</span><strong>₹{{ booking.amount }}</strong></div>
+                            </div>
+                            {% for charge in booking.extra_charges.all %}
+                            <div class="extra-charge">
+                                <div class="extra-charge-top">
+                                    <div>
+                                        <strong>{{ charge.description }}</strong>
+                                        <div class="small text-muted">{{ charge.get_charge_type_display }} · {{ charge.quantity }} × ₹{{ charge.unit_price }}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong>₹{{ charge.total }}</strong>
+                                        <div class="{% if charge.status == 'approved' %}billing-approved{% elif charge.status == 'rejected' %}billing-rejected{% else %}billing-pending{% endif %}">{{ charge.get_status_display }}</div>
+                                    </div>
+                                </div>
+                                {% if charge.status == 'pending' and booking.status != 'cancelled' %}
+                                <form method="post" action="{% url 'services:respond_extra_charge' charge.id %}">
+                                    {% csrf_token %}
+                                    <div class="extra-charge-actions">
+                                        <input type="text" name="customer_note" class="form-control form-control-sm" maxlength="500" placeholder="Optional note">
+                                        <button type="submit" name="decision" value="approved" class="btn btn-sm btn-primary-custom"><i class="bi bi-check2 me-1"></i>Approve</button>
+                                        <button type="submit" name="decision" value="rejected" class="btn btn-sm btn-light"><i class="bi bi-x-lg me-1"></i>Reject</button>
+                                    </div>
+                                </form>
+                                {% endif %}
+                            </div>
+                            {% empty %}
+                            <div class="small text-muted mt-2">No additional charges. Your bill currently contains only the base service amount{% if booking.emergency_fee %} and emergency fee{% endif %}.</div>
+                            {% endfor %}
+                        </div>
+
+<div class="row-actions">
+
+                        {% if booking.status == 'completed' %}
+
+                            {% if not booking.rating %}
+
+                            <a
+                                class="btn btn-sm btn-light"
+                                href="{% url 'services:rate_booking' booking.id %}"
+                            >
+                                Rate
+                            </a>
+
+                            {% endif %}
+
+
+                            {% if booking.payment and booking.payment.payment_method == 'cash' and booking.payment.status == 'submitted' %}
+
+                            <span class="btn btn-sm btn-light disabled">
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                Cash collection pending
+                            </span>
+
+                            {% elif booking.payment and booking.payment.payment_method == 'cash' and booking.payment.status == 'verified' %}
+
+                            <span class="btn btn-sm btn-light">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Cash received
+                            </span>
+
+                            {% elif not booking.payment or booking.payment.status != 'verified' %}
+
+                            <a
+                                class="btn btn-sm btn-dark"
+                                href="{% url 'services:payment' booking.id %}"
+                            >
+                                Pay
+                            </a>
+
+                            {% endif %}
+
+
+                            <a
+                                class="btn btn-sm btn-light"
+                                href="{% url 'services:invoice' booking.id %}"
+                            >
+                                Invoice
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% empty %}
+
+                    <div class="empty-inline">
+
+                        <i class="bi bi-calendar2-plus"></i>
+
+                        <div>
+
+                            <strong>
+                                No bookings yet.
+                            </strong>
+
+                            <p>
+                                Find a trusted worker and make your first booking.
+                            </p>
+
+                            <a href="{% url 'services:service_list' %}">
+                                Browse services →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- NEED HELP -->
+            <div class="col-xl-4">
+
+                <div class="panel-card h-100">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <h4>
+                                Need help fast?
+                            </h4>
+
+                            <p>
+                                Emergency requests are prioritized.
+                            </p>
+
+                        </div>
+
+                        <i class="bi bi-lightning-charge-fill fs-3 text-warning"></i>
+
+                    </div>
+
+
+                    <p class="text-muted">
+
+                        Choose a service, allow location and use the emergency
+                        workflow to send a priority request.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'services:service_list' %}"
+                        class="btn btn-dark w-100 rounded-3"
+                    >
+                        Find emergency-ready worker
+                    </a>
+
+
+                    <div class="soft-panel mt-3">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        <span>
+                            Only verified providers can receive new bookings.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% block extra_js %}
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+(function () {
+
+    "use strict";
+
+
+    /*
+     * Active bookings which are currently
+     * in the "On the Way" state.
+     */
+    const trackingBookings = [
+
+        {% for booking in recent_bookings %}
+
+            {% if booking.status == 'on_the_way' %}
+
+            {
+                id: {{ booking.id }},
+                name: "{{ booking.worker.display_name|escapejs }}"
+            },
+
+            {% endif %}
+
+        {% endfor %}
+
+    ];
+
+
+    if (!trackingBookings.length) {
+        return;
+    }
+
+
+    const maps = {};
+    const workerMarkers = {};
+    const customerMarkers = {};
+    const trackingLines = {};
+    const firstLocationReceived = {};
+    const lastWorkerLocation = {};
+
+
+    /*
+     * Worker map icon.
+     */
+    function createWorkerIcon() {
+
+        return L.divIcon({
+
+            className: "",
+
+            html: `
+                <div class="worker-map-marker">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            `,
+
+            iconSize: [42, 42],
+
+            iconAnchor: [21, 21]
+
+        });
+
+    }
+
+
+    /*
+     * Customer destination icon.
+     */
+    function createCustomerIcon() {
+
+        return L.divIcon({
+
+            className: "",
+
+            html: `
+                <div class="customer-map-marker">
+                    <i class="bi bi-house-fill"></i>
+                </div>
+            `,
+
+            iconSize: [34, 34],
+
+            iconAnchor: [17, 17]
+
+        });
+
+    }
+
+
+    /*
+     * Update text safely.
+     */
+    function updateText(id, value) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+
+    }
+
+
+    /*
+     * Format distance.
+     */
+    function formatDistance(distance) {
+
+        if (
+            distance === null ||
+            distance === undefined
+        ) {
+
+            return "Waiting...";
+
+        }
+
+
+        const value = Number(distance);
+
+
+        if (Number.isNaN(value)) {
+            return "Waiting...";
+        }
+
+
+        if (value < 1) {
+
+            return Math.round(value * 1000) + " m";
+
+        }
+
+
+        return value.toFixed(1) + " km";
+
+    }
+
+
+    /*
+     * Format ETA.
+     */
+    function formatEta(minutes) {
+
+        if (
+            minutes === null ||
+            minutes === undefined
+        ) {
+
+            return "Waiting...";
+
+        }
+
+
+        const value =
+            Math.max(1, Math.round(Number(minutes)));
+
+
+        if (Number.isNaN(value)) {
+            return "Waiting...";
+        }
+
+
+        if (value === 1) {
+            return "About 1 min";
+        }
+
+
+        return "About " + value + " mins";
+
+    }
+
+
+    /*
+     * Format the last update time.
+     */
+    function formatUpdatedTime(value) {
+
+        if (!value) {
+            return "Waiting for first live location...";
+        }
+
+
+        try {
+
+            const date =
+                new Date(value);
+
+
+            return "Last location update: " +
+                date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                });
+
+        } catch (error) {
+
+            return "Location updated recently.";
+
+        }
+
+    }
+
+
+    /*
+     * Fit map around worker and customer.
+     */
+    function fitMapToLocations(
+        bookingId,
+        workerLatLng,
+        customerLatLng
+    ) {
+
+        if (!maps[bookingId]) {
+            return;
+        }
+
+
+        const points = [];
+
+
+        if (workerLatLng) {
+            points.push(workerLatLng);
+        }
+
+
+        if (customerLatLng) {
+            points.push(customerLatLng);
+        }
+
+
+        if (points.length < 2) {
+
+            if (points.length === 1) {
+
+                maps[bookingId].setView(
+                    points[0],
+                    15
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        const bounds =
+            L.latLngBounds(points);
+
+
+        maps[bookingId].fitBounds(
+            bounds,
+            {
+                padding: [45, 45],
+                maxZoom: 16
+            }
+        );
+
+    }
+
+
+    /*
+     * Draw a live straight line between
+     * worker and customer.
+     */
+    function updateTrackingLine(
+        bookingId,
+        workerLatLng,
+        customerLatLng
+    ) {
+
+        if (
+            !maps[bookingId] ||
+            !workerLatLng ||
+            !customerLatLng
+        ) {
+            return;
+        }
+
+
+        const points = [
+            workerLatLng,
+            customerLatLng
+        ];
+
+
+        if (!trackingLines[bookingId]) {
+
+            trackingLines[bookingId] =
+                L.polyline(
+                    points,
+                    {
+                        className: "tracking-line",
+                        weight: 4,
+                        opacity: 0.75,
+                        dashArray: "8 8"
+                    }
+                ).addTo(
+                    maps[bookingId]
+                );
+
+        } else {
+
+            trackingLines[bookingId].setLatLngs(
+                points
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Fetch worker's latest GPS location.
+     */
+    async function fetchWorkerLocation(booking) {
+
+        try {
+
+            const url =
+                "{% url 'services:worker_location_api' 0 %}"
+                .replace(
+                    "/0/",
+                    "/" + booking.id + "/"
+                );
+
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "X-Requested-With":
+                                "XMLHttpRequest"
+                        },
+
+                        credentials: "same-origin",
+
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Location request failed: " +
+                    response.status
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load worker location."
+                );
+
+            }
+
+
+            /*
+             * Tracking is no longer active.
+             */
+            if (!data.active) {
+
+                updateText(
+                    "tracking-badge-" + booking.id,
+                    "Ended"
+                );
+
+                updateText(
+                    "location-status-" + booking.id,
+                    "Tracking ended"
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Customer destination.
+             */
+            let customerLatLng = null;
+
+
+            if (
+                data.customer_latitude !== null &&
+                data.customer_longitude !== null
+            ) {
+
+                customerLatLng = [
+
+                    Number(
+                        data.customer_latitude
+                    ),
+
+                    Number(
+                        data.customer_longitude
+                    )
+
+                ];
+
+
+                if (
+                    !customerMarkers[booking.id]
+                ) {
+
+                    customerMarkers[booking.id] =
+
+                        L.marker(
+                            customerLatLng,
+                            {
+                                icon:
+                                    createCustomerIcon()
+                            }
+                        )
+                        .addTo(
+                            maps[booking.id]
+                        )
+                        .bindPopup(
+                            "<strong>Your location</strong>"
+                        );
+
+                } else {
+
+                    customerMarkers[
+                        booking.id
+                    ].setLatLng(
+                        customerLatLng
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * Worker has not shared GPS yet.
+             */
+            if (
+                data.latitude === null ||
+                data.longitude === null
+            ) {
+
+                updateText(
+                    "distance-" + booking.id,
+                    "Waiting for GPS..."
+                );
+
+                updateText(
+                    "eta-" + booking.id,
+                    "Waiting for GPS..."
+                );
+
+                updateText(
+                    "location-status-" + booking.id,
+                    "Waiting for worker GPS"
+                );
+
+                return;
+
+            }
+
+
+            const workerLatLng = [
+
+                Number(data.latitude),
+
+                Number(data.longitude)
+
+            ];
+
+
+            /*
+             * Create worker marker.
+             */
+            if (
+                !workerMarkers[booking.id]
+            ) {
+
+                workerMarkers[booking.id] =
+
+                    L.marker(
+                        workerLatLng,
+                        {
+                            icon:
+                                createWorkerIcon()
+                        }
+                    )
+                    .addTo(
+                        maps[booking.id]
+                    )
+                    .bindPopup(
+                        "<strong>" +
+                        booking.name +
+                        "</strong><br>" +
+                        "Live worker location"
+                    );
+
+
+                firstLocationReceived[
+                    booking.id
+                ] = true;
+
+
+                fitMapToLocations(
+                    booking.id,
+                    workerLatLng,
+                    customerLatLng
+                );
+
+            } else {
+
+                /*
+                 * Move worker marker.
+                 */
+                workerMarkers[
+                    booking.id
+                ].setLatLng(
+                    workerLatLng
+                );
+
+            }
+
+
+            /*
+             * Draw worker → customer line.
+             */
+            updateTrackingLine(
+                booking.id,
+                workerLatLng,
+                customerLatLng
+            );
+
+
+            /*
+             * Store latest position.
+             */
+            lastWorkerLocation[
+                booking.id
+            ] = workerLatLng;
+
+
+            /*
+             * Update distance.
+             */
+            updateText(
+                "distance-" + booking.id,
+                formatDistance(
+                    data.distance_km
+                )
+            );
+
+
+            /*
+             * Update ETA.
+             */
+            updateText(
+                "eta-" + booking.id,
+                formatEta(
+                    data.eta_minutes
+                )
+            );
+
+
+            /*
+             * Update live status.
+             */
+            updateText(
+                "location-status-" + booking.id,
+                "Live • Updated just now"
+            );
+
+
+            /*
+             * Update timestamp.
+             */
+            updateText(
+                "updated-time-" + booking.id,
+                formatUpdatedTime(
+                    data.location_updated_at
+                )
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Worker location error:",
+                error
+            );
+
+
+            updateText(
+                "location-status-" + booking.id,
+                "Reconnecting..."
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Initialize each live map.
+     */
+    trackingBookings.forEach(
+        function (booking) {
+
+            const mapElement =
+                document.getElementById(
+                    "live-map-" + booking.id
+                );
+
+
+            if (!mapElement) {
+                return;
+            }
+
+
+            const map =
+                L.map(
+                    mapElement,
+                    {
+                        zoomControl: true,
+                        attributionControl: true
+                    }
+                );
+
+
+            /*
+             * OpenStreetMap tiles.
+             */
+            L.tileLayer(
+
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+                {
+                    maxZoom: 19,
+
+                    attribution:
+                        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+
+                }
+
+            ).addTo(map);
+
+
+            /*
+             * Default India view.
+             */
+            map.setView(
+                [20.5937, 78.9629],
+                5
+            );
+
+
+            maps[booking.id] = map;
+
+
+            /*
+             * First update immediately.
+             */
+            fetchWorkerLocation(
+                booking
+            );
+
+
+            /*
+             * Keep map updated every 5 seconds.
+             */
+            const trackingInterval =
+                setInterval(
+                    function () {
+
+                        fetchWorkerLocation(
+                            booking
+                        );
+
+                    },
+                    5000
+                );
+
+
+            /*
+             * Stop polling when the page is
+             * no longer visible.
+             */
+            document.addEventListener(
+                "visibilitychange",
+                function () {
+
+                    if (
+                        document.hidden
+                    ) {
+
+                        return;
+
+                    }
+
+                    fetchWorkerLocation(
+                        booking
+                    );
+
+                }
+            );
+
+
+            /*
+             * Fix Leaflet rendering if the
+             * dashboard layout changes.
+             */
+            setTimeout(
+                function () {
+
+                    map.invalidateSize();
+
+                },
+                300
+            );
+
+        }
+    );
+
+})();
+</script>
+
+{% endblock %}
+
+
+<!-- =========================================================
+     EXISTING DASHBOARD AUTO REFRESH
+     ========================================================= -->
+
+{% if pending_bookings or accepted_bookings %}
+
+<script>
+
+setTimeout(
+    () => window.location.reload(),
+    20000
+);
+
+</script>
+
+{% endif %}
+
+{% endblock %}

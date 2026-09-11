@@ -1,0 +1,3476 @@
+/* =========================================================
+   SAHYOG — GLOBAL APPLICATION STYLES
+   Light + Dark Theme
+   ========================================================= */
+
+:root {
+    --ink: #101817;
+    --muted: #697674;
+    --line: #e5ecea;
+    --surface: #ffffff;
+    --soft: #f4f8f7;
+    --teal: #0d9488;
+    --teal-dark: #08766d;
+    --teal-soft: #e6f7f4;
+    --danger: #dc5b55;
+    --warning: #a8631b;
+    --shadow: 0 18px 55px rgba(16, 39, 36, .07);
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #fbfdfc;
+    color: var(--ink);
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    transition: .2s ease;
+}
+
+img {
+    max-width: 100%;
+}
+
+::selection {
+    background: var(--teal);
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar,
+.footer {
+    background: #ffffff;
+}
+
+.app-nav {
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, .92);
+}
+
+.brand {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand:hover {
+    color: var(--ink);
+}
+
+.brand-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    background: var(--teal);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-link {
+    color: #53605e !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: var(--teal) !important;
+}
+
+.btn-primary-custom {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #ffffff;
+}
+
+.btn-primary-custom:hover {
+    background: var(--teal-dark);
+    border-color: var(--teal-dark);
+    color: #ffffff;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--teal-dark);
+    font-size: .78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero-premium {
+    padding: 100px 0 90px;
+    background:
+        radial-gradient(circle at 82% 18%, #dff7f3 0, transparent 30%),
+        linear-gradient(135deg, #ffffff 0, #f2faf8 100%);
+    overflow: hidden;
+}
+
+.hero-premium h1 {
+    font-family: "Plus Jakarta Sans";
+    font-size: clamp(3.1rem, 7vw, 6.2rem);
+    line-height: .98;
+    letter-spacing: -.07em;
+    margin: 20px 0;
+}
+
+.hero-premium h1 span {
+    color: var(--teal);
+}
+
+.hero-copy {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 650px;
+}
+
+.hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    color: #52605d;
+    font-size: .9rem;
+}
+
+.hero-trust i {
+    color: var(--teal);
+    margin-right: 5px;
+}
+
+.hero-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.floating-chip {
+    position: absolute;
+    background: #101817;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 10px 15px;
+    font-size: .78rem;
+    font-weight: 700;
+    box-shadow: 0 10px 30px #0002;
+}
+
+.chip-top {
+    top: 18px;
+    right: -15px;
+}
+
+.chip-bottom {
+    bottom: 18px;
+    left: -15px;
+}
+
+.hero-card-head,
+.worker-line,
+.hero-price,
+.match-meter > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.verified-pill,
+.pending-pill,
+.status-chip,
+.emergency-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.verified-pill {
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+}
+
+.pending-pill {
+    background: #fff4df;
+    color: #9a6400;
+}
+
+.status-chip {
+    background: #eef2f1;
+    color: #53605e;
+}
+
+.status-pending {
+    background: #fff4df;
+    color: #996100;
+}
+
+.status-accepted,
+.status-in_progress {
+    background: #e8f1ff;
+    color: #275eac;
+}
+
+.status-completed,
+.status-paid,
+.status-active {
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+}
+
+.status-cancelled,
+.status-rejected {
+    background: #fff0ef;
+    color: #a33c36;
+}
+
+.status-on_the_way {
+    background: #eaf1ff;
+    color: #2a5fb0;
+}
+
+.status-arrived {
+    background: #fff0e0;
+    color: #a8631b;
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.avatar.sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    font-size: .85rem;
+}
+
+
+/* =========================================================
+   WORKER MINI
+   ========================================================= */
+
+.worker-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.distance {
+    font-size: .8rem;
+    color: var(--teal-dark);
+    font-weight: 800;
+}
+
+.match-meter {
+    padding: 22px 0;
+}
+
+.progress {
+    height: 9px;
+    background: #edf2f0;
+}
+
+.progress-bar {
+    background: var(--teal);
+}
+
+.hero-price {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+}
+
+.hero-price strong {
+    font-size: 2rem;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.section {
+    padding: 95px 0;
+}
+
+.section.soft {
+    background: #f2f8f6;
+}
+
+.section-heading {
+    max-width: 700px;
+    margin-bottom: 42px;
+}
+
+.section-heading h2,
+.cta-card h2 {
+    font-family: "Plus Jakarta Sans";
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    letter-spacing: -.05em;
+    margin: 12px 0;
+}
+
+.section-heading p {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.feature-card,
+.panel-card,
+.form-card,
+.invoice-card,
+.market-card,
+.admin-stat,
+.stat-card,
+.impact-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 35px rgba(16, 39, 36, .04);
+}
+
+.feature-card {
+    border-radius: 22px;
+    padding: 28px;
+    height: 100%;
+    position: relative;
+}
+
+.step {
+    position: absolute;
+    right: 22px;
+    top: 20px;
+    color: #b8c7c4;
+    font-weight: 800;
+}
+
+.feature-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.feature-card h4 {
+    margin-top: 28px;
+    font-weight: 800;
+}
+
+.feature-card p {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   TRUST / IMPACT
+   ========================================================= */
+
+.trust-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+.trust-list > div {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.trust-list i {
+    color: var(--teal);
+    font-size: 1.2rem;
+}
+
+.trust-list small,
+.trust-list b {
+    display: block;
+}
+
+.trust-list small {
+    color: var(--muted);
+}
+
+.impact-card {
+    border-radius: 28px;
+    padding: 35px;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+}
+
+.impact-grid div {
+    background: #ffffff;
+    padding: 25px;
+}
+
+.impact-grid strong {
+    display: block;
+    font-size: 2rem;
+    font-family: "Plus Jakarta Sans";
+}
+
+.impact-grid span {
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+.cta-card {
+    background: linear-gradient(135deg, #0d9488, #075e58);
+    color: #ffffff;
+    border-radius: 30px;
+    padding: 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.cta-card .eyebrow {
+    color: #bff5ef;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    border-top: 1px solid var(--line);
+}
+
+.footer h6 {
+    font-weight: 800;
+}
+
+.footer a {
+    display: block;
+    text-decoration: none;
+    color: var(--muted);
+    margin: 7px 0;
+    font-size: .9rem;
+}
+
+.footer a:hover {
+    color: var(--teal);
+}
+
+
+/* =========================================================
+   MAIN PAGES
+   ========================================================= */
+
+.marketplace,
+.dash-page,
+.admin-page,
+.form-page {
+    padding: 55px 0 90px;
+}
+
+.page-title {
+    font-family: "Plus Jakarta Sans";
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    letter-spacing: -.06em;
+    margin: 8px 0;
+}
+
+
+/* =========================================================
+   SEARCH / FIND WORKER
+   ========================================================= */
+
+.search-shell {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: var(--shadow);
+}
+
+.search-shell .form-control,
+.search-shell .form-select,
+.search-shell .input-group-text {
+    border: 0;
+    box-shadow: none;
+}
+
+.search-box {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .03);
+}
+
+.search-icon {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888888;
+    font-size: 18px;
+}
+
+.search-box input {
+    border: 0;
+    outline: 0;
+    flex: 1;
+    font-size: 15px;
+    min-width: 0;
+    background: transparent;
+}
+
+.search-box button {
+    border: 0;
+    background: var(--teal);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 11px;
+    font-weight: 700;
+}
+
+.search-box button:hover {
+    background: var(--teal-dark);
+}
+
+
+/* =========================================================
+   BANNERS
+   ========================================================= */
+
+.match-banner,
+.info-strip,
+.soft-panel,
+.emergency-banner {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+}
+
+.emergency-banner {
+    background: #fff0ef;
+    color: #a33c36;
+}
+
+.emergency-banner p {
+    margin: 0;
+    font-size: .85rem;
+}
+
+.emergency-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #dc5b55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   MARKETPLACE / FIND WORKER CARDS
+   ========================================================= */
+
+.market-card {
+    border-radius: 23px;
+    padding: 23px;
+    transition: .22s;
+}
+
+.market-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.market-card h4 {
+    font-weight: 800;
+}
+
+.category-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 17px;
+    background: #eef5f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    color: var(--teal-dark);
+}
+
+.category-icon.sm {
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+    font-size: 1rem;
+}
+
+.worker-line {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+}
+
+.distance-line {
+    font-size: .8rem;
+    color: var(--teal-dark);
+    font-weight: 700;
+    margin-top: 14px;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.empty-card {
+    padding: 70px;
+    border: 1px dashed #cad7d4;
+    border-radius: 24px;
+    background: #ffffff;
+}
+
+.back-link {
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+.form-card,
+.invoice-card {
+    border-radius: 28px;
+    padding: 32px;
+}
+
+.form-card h1,
+.invoice-card h1 {
+    font-family: "Plus Jakarta Sans";
+    letter-spacing: -.04em;
+}
+
+.form-card-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.price-badge {
+    background: #101817;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 14px;
+    font-weight: 800;
+}
+
+.worker-summary {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+}
+
+.form-label {
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    border-color: #dce6e3;
+    border-radius: 12px;
+    padding: .78rem .9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 .2rem #0d94881c;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.verification-strip {
+    margin: 18px 0;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: #fff4df;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.verification-strip.verified {
+    background: var(--teal-soft);
+}
+
+.verification-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal-dark);
+}
+
+.verification-strip p {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+.dash-hero {
+    background: linear-gradient(135deg, #ffffff, #eef9f6);
+    border: 1px solid var(--line);
+    border-radius: 25px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.dash-hero h1 {
+    font-family: "Plus Jakarta Sans";
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    letter-spacing: -.06em;
+    margin: 10px 0;
+}
+
+.dash-hero p {
+    color: var(--muted);
+    margin: 0;
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stat-card {
+    border-radius: 19px;
+    padding: 20px;
+    display: grid;
+    gap: 7px;
+}
+
+.stat-card i {
+    color: var(--teal);
+    font-size: 1.2rem;
+}
+
+.stat-card strong {
+    font-size: 1.8rem;
+    font-family: "Plus Jakarta Sans";
+}
+
+.stat-card span {
+    color: var(--muted);
+    font-size: .82rem;
+}
+
+
+/* =========================================================
+   PANELS / BOOKINGS
+   ========================================================= */
+
+.panel-card {
+    border-radius: 22px;
+    padding: 23px;
+}
+
+.panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.panel-head h4 {
+    font-weight: 800;
+    margin: 0;
+}
+
+.panel-head p {
+    color: var(--muted);
+    font-size: .82rem;
+    margin: 3px 0 0;
+}
+
+.count-badge {
+    background: #101817;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.booking-row,
+.queue-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-top: 1px solid var(--line);
+    padding: 16px 0;
+}
+
+.booking-row:first-of-type,
+.queue-row:first-of-type {
+    border-top: 0;
+}
+
+.row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding-bottom: 12px;
+}
+
+.empty-inline {
+    padding: 35px 10px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty-inline i {
+    font-size: 2rem;
+    color: var(--teal);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quick-grid a {
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    padding: 15px;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.quick-grid i {
+    color: var(--teal);
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+.admin-stat {
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.admin-stat .admin-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--teal-soft);
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.admin-stat small,
+.admin-stat span {
+    display: block;
+    color: var(--muted);
+}
+
+.admin-stat strong {
+    display: block;
+    font-size: 1.7rem;
+    font-family: "Plus Jakarta Sans";
+}
+
+.admin-stat.danger .admin-icon {
+    background: #fff0ef;
+    color: #b84b44;
+}
+
+
+/* =========================================================
+   FORECAST / ANALYTICS
+   ========================================================= */
+
+.forecast-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+}
+
+.forecast-row small {
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.forecast-note {
+    font-size: .76rem;
+    color: var(--muted);
+    background: #f5f8f7;
+    border-radius: 12px;
+    padding: 11px;
+}
+
+.forecast-tile {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px;
+    background: linear-gradient(145deg, #ffffff, #f5faf8);
+}
+
+.forecast-tile > div {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.forecast-tile span {
+    font-weight: 800;
+}
+
+.forecast-tile strong {
+    font: 800 1.7rem "Plus Jakarta Sans";
+}
+
+.forecast-tile small {
+    display: block;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.metric-mini {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 17px;
+}
+
+.metric-mini small,
+.metric-mini strong {
+    display: block;
+}
+
+.metric-mini small {
+    color: var(--muted);
+}
+
+.metric-mini strong {
+    margin-top: 4px;
+}
+
+.tiny-muted {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.soft-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 15px;
+    border-radius: 15px;
+    background: #f5f8f7;
+    color: #53615e;
+    font-size: .83rem;
+}
+
+.soft-panel i {
+    color: var(--teal);
+}
+
+
+/* =========================================================
+   INVOICE
+   ========================================================= */
+
+.invoice-table > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.invoice-table .total {
+    font-size: 1.3rem;
+    border-bottom: 0;
+    padding-top: 20px;
+}
+
+.invoice-table strong {
+    font-family: "Plus Jakarta Sans";
+}
+
+
+/* =========================================================
+   NAVIGATION DRAWER
+   ========================================================= */
+
+.drawer-trigger {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    background: #ffffff;
+    border-radius: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    color: var(--ink);
+    transition: .2s;
+}
+
+.drawer-trigger:hover {
+    border-color: #b9ccc8;
+    transform: translateY(-1px);
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 24, 22, .38);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s;
+    z-index: 1040;
+}
+
+.drawer-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.side-drawer {
+    position: fixed;
+    top: 0;
+    right: -390px;
+    width: min(380px, 92vw);
+    height: 100vh;
+    background: #ffffff;
+    z-index: 1050;
+    box-shadow: -25px 0 70px rgba(0, 0, 0, .14);
+    transition: right .28s cubic-bezier(.2, .8, .2, 1);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-drawer.show {
+    right: 0;
+}
+
+.drawer-open {
+    overflow: hidden;
+}
+
+.drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.drawer-close {
+    border: 0;
+    background: #f3f7f6;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+}
+
+.drawer-profile {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    background: var(--soft);
+    border-radius: 20px;
+    padding: 16px;
+    margin: 26px 0 18px;
+}
+
+.drawer-profile strong,
+.drawer-profile small {
+    display: block;
+}
+
+.drawer-profile small {
+    color: var(--muted);
+    font-size: .8rem;
+    margin-top: 2px;
+}
+
+.drawer-nav {
+    display: grid;
+    gap: 6px;
+}
+
+.drawer-nav a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 14px;
+    border-radius: 13px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.drawer-nav a:hover {
+    background: var(--soft);
+    color: var(--teal-dark);
+}
+
+.drawer-nav a i {
+    width: 22px;
+    text-align: center;
+    color: var(--teal);
+    font-size: 1.05rem;
+}
+
+.drawer-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 10px 0;
+}
+
+.drawer-danger {
+    color: #a33c36 !important;
+}
+
+.drawer-danger i {
+    color: #dc5b55 !important;
+}
+
+.drawer-primary {
+    background: var(--teal-soft);
+}
+
+.drawer-foot {
+    margin-top: auto;
+    color: var(--muted);
+    font-size: .75rem;
+    padding: 14px 3px;
+    border-top: 1px solid var(--line);
+}
+
+
+/* =========================================================
+   LANGUAGE SWITCHER
+   ========================================================= */
+
+.lang-switch select {
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 600;
+    padding: .35rem 1.6rem .35rem .8rem;
+    background-color: #ffffff;
+}
+
+.lang-switch select:focus {
+    outline: none;
+    box-shadow: 0 0 0 .15rem #0d94881c;
+    border-color: var(--teal);
+}
+
+
+/* =========================================================
+   THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .35rem .8rem;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: .85rem;
+}
+
+.theme-toggle i {
+    font-size: 1rem;
+}
+
+.drawer-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .6rem 1.2rem;
+}
+
+
+/* =========================================================
+   CATEGORY COLORS
+   ========================================================= */
+
+.category-electrician {
+    background: #fff4d6;
+    color: #9a6c00;
+}
+
+.category-plumber {
+    background: #e3f1ff;
+    color: #1f5f9e;
+}
+
+.category-carpenter {
+    background: #f3e8da;
+    color: #8a5a26;
+}
+
+.category-painter {
+    background: #fde8f3;
+    color: #a12e79;
+}
+
+.category-cleaner {
+    background: #e6f7f4;
+    color: #0d9488;
+}
+
+.category-caregiver {
+    background: #ffe8e8;
+    color: #b5433c;
+}
+
+.category-driver {
+    background: #eaeeff;
+    color: #3d4fb0;
+}
+
+.category-gardener {
+    background: #e9f7e2;
+    color: #3f8f2b;
+}
+
+.category-technician {
+    background: #eef0f5;
+    color: #4b5568;
+}
+
+.category-domestic_helper {
+    background: #fff0e0;
+    color: #a8631b;
+}
+
+.category-other {
+    background: #eef5f3;
+    color: #0d9488;
+}
+
+
+/* =========================================================
+   CUSTOMER CATEGORY PICKER
+   ========================================================= */
+
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px 6px 6px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: .85rem;
+    transition: .15s;
+}
+
+.category-pill:hover {
+    border-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+
+/* =========================================================
+   DARK THEME — GLOBAL
+   ========================================================= */
+
+html[data-theme="dark"] {
+    --ink: #eef3f1;
+    --muted: #a9b6b3;
+    --line: #263936;
+    --surface: #111c1a;
+    --soft: #162421;
+    --teal: #14b8a6;
+    --teal-dark: #2dd4bf;
+    --teal-soft: #0d3b36;
+    --danger: #f28b85;
+    --warning: #ffb877;
+    --shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    color-scheme: dark;
+}
+
+
+/* =========================================================
+   DARK — BODY
+   ========================================================= */
+
+html[data-theme="dark"] body {
+    background: #091311 !important;
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] main,
+html[data-theme="dark"] section,
+html[data-theme="dark"] .marketplace,
+html[data-theme="dark"] .dash-page,
+html[data-theme="dark"] .admin-page,
+html[data-theme="dark"] .form-page {
+    color: var(--ink);
+}
+
+
+/* =========================================================
+   DARK — NAVBAR / HEADER
+   ========================================================= */
+
+html[data-theme="dark"] .navbar,
+html[data-theme="dark"] .footer,
+html[data-theme="dark"] .app-nav {
+    background: #0d1917 !important;
+    color: var(--ink) !important;
+    border-color: var(--line) !important;
+}
+
+html[data-theme="dark"] .nav-link {
+    color: #c6d1ce !important;
+}
+
+html[data-theme="dark"] .nav-link:hover {
+    color: var(--teal) !important;
+}
+
+html[data-theme="dark"] .brand,
+html[data-theme="dark"] .brand:hover {
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .drawer-trigger {
+    background: #111c1a !important;
+    color: var(--ink) !important;
+    border-color: var(--line) !important;
+}
+
+
+/* =========================================================
+   DARK — HERO
+   ========================================================= */
+
+html[data-theme="dark"] .hero-premium {
+    background:
+        radial-gradient(circle at 82% 18%, #123c37 0, transparent 30%),
+        linear-gradient(135deg, #091311 0, #0f201d 100%) !important;
+}
+
+html[data-theme="dark"] .hero-premium h1,
+html[data-theme="dark"] .hero-premium h2,
+html[data-theme="dark"] .hero-premium h3 {
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .hero-copy,
+html[data-theme="dark"] .hero-trust {
+    color: var(--muted) !important;
+}
+
+html[data-theme="dark"] .hero-card {
+    background: var(--surface) !important;
+    border-color: var(--line) !important;
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .floating-chip {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+}
+
+
+/* =========================================================
+   DARK — COMMON CARDS
+   ========================================================= */
+
+html[data-theme="dark"] .feature-card,
+html[data-theme="dark"] .panel-card,
+html[data-theme="dark"] .form-card,
+html[data-theme="dark"] .invoice-card,
+html[data-theme="dark"] .market-card,
+html[data-theme="dark"] .admin-stat,
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .impact-card,
+html[data-theme="dark"] .hero-card,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .modal-content {
+    background: var(--surface) !important;
+    color: var(--ink) !important;
+    border-color: var(--line) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .22) !important;
+}
+
+html[data-theme="dark"] .feature-card p,
+html[data-theme="dark"] .panel-head p,
+html[data-theme="dark"] .stat-card span,
+html[data-theme="dark"] .admin-stat span,
+html[data-theme="dark"] .admin-stat small,
+html[data-theme="dark"] .section-heading p {
+    color: var(--muted) !important;
+}
+
+
+/* =========================================================
+   DARK — DASHBOARD HERO
+   ========================================================= */
+
+html[data-theme="dark"] .dash-hero {
+    background: linear-gradient(135deg, #111c1a, #142824) !important;
+    border-color: var(--line) !important;
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .dash-hero h1 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .dash-hero p {
+    color: #a9b6b3 !important;
+}
+
+
+/* =========================================================
+   DARK — FIND WORKER / SEARCH
+   ========================================================= */
+
+html[data-theme="dark"] .search-shell,
+html[data-theme="dark"] .search-box {
+    background: #111c1a !important;
+    border-color: var(--line) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .20) !important;
+}
+
+html[data-theme="dark"] .search-shell .form-control,
+html[data-theme="dark"] .search-shell .form-select,
+html[data-theme="dark"] .search-shell .input-group-text,
+html[data-theme="dark"] .search-box input {
+    background: transparent !important;
+    color: var(--ink) !important;
+    border-color: var(--line) !important;
+}
+
+html[data-theme="dark"] .search-box input::placeholder,
+html[data-theme="dark"] .form-control::placeholder {
+    color: #71817d !important;
+}
+
+html[data-theme="dark"] .search-icon {
+    color: #8c9b97 !important;
+}
+
+html[data-theme="dark"] .page-title {
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .market-card:hover {
+    border-color: #31504a !important;
+}
+
+
+/* =========================================================
+   DARK — FORMS
+   ========================================================= */
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] input,
+html[data-theme="dark"] select {
+    background: #162421 !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus {
+    background: #172824 !important;
+    color: #ffffff !important;
+    border-color: var(--teal) !important;
+}
+
+html[data-theme="dark"] .form-control::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #71817d !important;
+}
+
+html[data-theme="dark"] .form-label {
+    color: #dce7e4 !important;
+}
+
+
+/* =========================================================
+   DARK — BUTTONS
+   ========================================================= */
+
+html[data-theme="dark"] .btn-light {
+    background: #172522 !important;
+    border-color: #304641 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .btn-light:hover {
+    background: #20342f !important;
+    border-color: #3d5953 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .btn-outline-secondary {
+    color: #cbd6d3 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .btn-outline-secondary:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .btn-outline-success {
+    color: #5ee7d7 !important;
+    border-color: #248f83 !important;
+}
+
+html[data-theme="dark"] .btn-outline-success:hover {
+    background: #0d3b36 !important;
+    color: #8af2e7 !important;
+}
+
+
+/* =========================================================
+   DARK — CUSTOMER LEGACY PAGE
+   ========================================================= */
+
+html[data-theme="dark"] .customer-page {
+    background: #091311 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .top-header {
+    background: #0d1917 !important;
+    border-bottom-color: #263936 !important;
+}
+
+html[data-theme="dark"] .customer-page .top-header .brand,
+html[data-theme="dark"] .customer-page .brand-name {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .menu-button {
+    background: #111c1a !important;
+    border-color: #304641 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .service-card,
+html[data-theme="dark"] .customer-page .booking-card,
+html[data-theme="dark"] .customer-page .stat-card,
+html[data-theme="dark"] .customer-page .account-card {
+    background: #111c1a !important;
+    border-color: #263936 !important;
+    color: #eef3f1 !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .22) !important;
+}
+
+html[data-theme="dark"] .customer-page .service-card:hover,
+html[data-theme="dark"] .customer-page .booking-card:hover {
+    background: #142421 !important;
+    border-color: #31504a !important;
+}
+
+html[data-theme="dark"] .customer-page .service-card h5,
+html[data-theme="dark"] .customer-page .service-card h6,
+html[data-theme="dark"] .customer-page .service-name,
+html[data-theme="dark"] .customer-page .booking-service,
+html[data-theme="dark"] .customer-page .booking-category,
+html[data-theme="dark"] .customer-page .booking-id,
+html[data-theme="dark"] .customer-page .info-value,
+html[data-theme="dark"] .customer-page .account-name,
+html[data-theme="dark"] .customer-page .stat-number {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .welcome-title,
+html[data-theme="dark"] .customer-page .section-title {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .welcome-subtitle,
+html[data-theme="dark"] .customer-page .booking-description,
+html[data-theme="dark"] .customer-page .info-label,
+html[data-theme="dark"] .customer-page .account-email,
+html[data-theme="dark"] .customer-page .stat-label {
+    color: #9eadaa !important;
+}
+
+
+/* =========================================================
+   DARK — BOOKING INFO BOXES
+   ========================================================= */
+
+html[data-theme="dark"] .customer-page .booking-info-grid .info-item {
+    background: #172421 !important;
+    border-color: #2a403c !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .info-label {
+    color: #82918e !important;
+}
+
+html[data-theme="dark"] .customer-page .info-value {
+    color: #e8f1ef !important;
+}
+
+html[data-theme="dark"] .customer-page .booking-actions {
+    border-top-color: #263936 !important;
+}
+
+html[data-theme="dark"] .customer-page .payment-box {
+    background: #14221f !important;
+    border-color: #2a403c !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .payment-box strong {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .payment-box .text-secondary {
+    color: #9caaa7 !important;
+}
+
+
+/* =========================================================
+   DARK — CUSTOMER DRAWER
+   ========================================================= */
+
+html[data-theme="dark"] .customer-page .side-drawer,
+html[data-theme="dark"] .side-drawer {
+    background: #101b19 !important;
+    color: #eef3f1 !important;
+    border-left-color: #263936 !important;
+}
+
+html[data-theme="dark"] .customer-page .drawer-body {
+    background: #101b19 !important;
+}
+
+html[data-theme="dark"] .customer-page .drawer-link,
+html[data-theme="dark"] .drawer-nav a {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .drawer-link:hover,
+html[data-theme="dark"] .drawer-nav a:hover {
+    background: #17302b !important;
+    color: #2dd4bf !important;
+}
+
+html[data-theme="dark"] .customer-page .drawer-link-icon {
+    background: #172522 !important;
+    color: #2dd4bf !important;
+}
+
+html[data-theme="dark"] .drawer-profile {
+    background: #162421 !important;
+}
+
+html[data-theme="dark"] .drawer-close {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .drawer-section-title {
+    color: #81918d !important;
+}
+
+
+/* =========================================================
+   DARK — CATEGORY PILLS
+   ========================================================= */
+
+html[data-theme="dark"] .category-pill {
+    background: #111c1a !important;
+    border-color: #2a403c !important;
+    color: #e8f1ef !important;
+}
+
+html[data-theme="dark"] .category-pill:hover {
+    background: #17302b !important;
+    border-color: var(--teal) !important;
+    color: #6ee7d9 !important;
+}
+
+html[data-theme="dark"] .category-icon {
+    filter: brightness(1.15);
+}
+
+
+/* =========================================================
+   DARK — CATEGORY ICONS
+   ========================================================= */
+
+html[data-theme="dark"] .category-electrician {
+    background: #403616 !important;
+    color: #ffd66b !important;
+}
+
+html[data-theme="dark"] .category-plumber {
+    background: #18334a !important;
+    color: #76baff !important;
+}
+
+html[data-theme="dark"] .category-carpenter {
+    background: #3d2d1d !important;
+    color: #e5b27a !important;
+}
+
+html[data-theme="dark"] .category-painter {
+    background: #40243a !important;
+    color: #f29bce !important;
+}
+
+html[data-theme="dark"] .category-cleaner {
+    background: #0d3b36 !important;
+    color: #53d9ca !important;
+}
+
+html[data-theme="dark"] .category-caregiver {
+    background: #402323 !important;
+    color: #ff9c95 !important;
+}
+
+html[data-theme="dark"] .category-driver {
+    background: #222b4a !important;
+    color: #9baeff !important;
+}
+
+html[data-theme="dark"] .category-gardener {
+    background: #243a1d !important;
+    color: #a8dc87 !important;
+}
+
+html[data-theme="dark"] .category-technician {
+    background: #272b34 !important;
+    color: #b7c0d1 !important;
+}
+
+html[data-theme="dark"] .category-domestic_helper {
+    background: #3d2b1b !important;
+    color: #f0b97e !important;
+}
+
+html[data-theme="dark"] .category-other {
+    background: #172824 !important;
+    color: #6ee7d9 !important;
+}
+
+
+/* =========================================================
+   DARK — STATUS
+   ========================================================= */
+
+html[data-theme="dark"] .status-chip {
+    background: #172522 !important;
+    color: #dce7e4 !important;
+}
+
+html[data-theme="dark"] .status-pending {
+    background: #443518 !important;
+    color: #ffd78a !important;
+}
+
+html[data-theme="dark"] .status-accepted {
+    background: #172c49 !important;
+    color: #9fc1ff !important;
+}
+
+html[data-theme="dark"] .status-in_progress {
+    background: #302650 !important;
+    color: #c5b4ff !important;
+}
+
+html[data-theme="dark"] .status-completed,
+html[data-theme="dark"] .status-paid,
+html[data-theme="dark"] .status-active {
+    background: #0d3b36 !important;
+    color: #6ee7d9 !important;
+}
+
+html[data-theme="dark"] .status-cancelled,
+html[data-theme="dark"] .status-rejected {
+    background: #402322 !important;
+    color: #ffaaa4 !important;
+}
+
+html[data-theme="dark"] .status-on_the_way {
+    background: #16233a !important;
+    color: #8fb3ff !important;
+}
+
+html[data-theme="dark"] .status-arrived {
+    background: #3a2712 !important;
+    color: #ffb877 !important;
+}
+
+
+/* =========================================================
+   DARK — ALERTS
+   ========================================================= */
+
+html[data-theme="dark"] .alert-success {
+    background: #103b32 !important;
+    border-color: #1f6e60 !important;
+    color: #9be7d8 !important;
+}
+
+html[data-theme="dark"] .alert-info {
+    background: #172c49 !important;
+    border-color: #28527d !important;
+    color: #a9c8ff !important;
+}
+
+html[data-theme="dark"] .alert-primary {
+    background: #1b3045 !important;
+    border-color: #2d5573 !important;
+    color: #a9ceff !important;
+}
+
+html[data-theme="dark"] .alert-warning {
+    background: #443518 !important;
+    border-color: #765b22 !important;
+    color: #ffd78a !important;
+}
+
+html[data-theme="dark"] .alert-danger {
+    background: #402322 !important;
+    border-color: #753b38 !important;
+    color: #ffaaa4 !important;
+}
+
+
+/* =========================================================
+   DARK — SOFT / VERIFICATION
+   ========================================================= */
+
+html[data-theme="dark"] .soft-panel {
+    background: #172421 !important;
+    color: #c7d4d1 !important;
+}
+
+html[data-theme="dark"] .verification-strip {
+    background: #3b301b !important;
+    color: #f7df9d !important;
+}
+
+html[data-theme="dark"] .verification-strip.verified {
+    background: #0d3b36 !important;
+    color: #9be7d8 !important;
+}
+
+html[data-theme="dark"] .verification-icon {
+    background: #172522 !important;
+    color: #6ee7d9 !important;
+}
+
+
+/* =========================================================
+   DARK — FORECAST
+   ========================================================= */
+
+html[data-theme="dark"] .forecast-tile {
+    background: linear-gradient(145deg, #111c1a, #172824) !important;
+    border-color: var(--line) !important;
+    color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .forecast-note {
+    background: #172421 !important;
+    color: #a9b6b3 !important;
+}
+
+
+/* =========================================================
+   DARK — TABLES
+   ========================================================= */
+
+html[data-theme="dark"] .table {
+    --bs-table-color: #eef3f1;
+    --bs-table-bg: #111c1a;
+    --bs-table-border-color: #263936;
+    color: #eef3f1 !important;
+    background: #111c1a !important;
+}
+
+html[data-theme="dark"] .table th,
+html[data-theme="dark"] .table td {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .table thead th {
+    background: #162421 !important;
+}
+
+
+/* =========================================================
+   DARK — BOOTSTRAP WHITE/LIGHT UTILITIES
+   ========================================================= */
+
+html[data-theme="dark"] .bg-white {
+    background-color: #111c1a !important;
+}
+
+html[data-theme="dark"] .bg-light {
+    background-color: #162421 !important;
+}
+
+html[data-theme="dark"] .text-dark {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .text-secondary {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] .border {
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .border-top,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-start,
+html[data-theme="dark"] .border-end {
+    border-color: #263936 !important;
+}
+
+
+/* =========================================================
+   DARK — INLINE WHITE BACKGROUNDS
+   ========================================================= */
+
+html[data-theme="dark"] [style*="background: white"],
+html[data-theme="dark"] [style*="background:white"],
+html[data-theme="dark"] [style*="background: #fff"],
+html[data-theme="dark"] [style*="background:#fff"],
+html[data-theme="dark"] [style*="background-color: white"],
+html[data-theme="dark"] [style*="background-color:white"],
+html[data-theme="dark"] [style*="background-color: #fff"],
+html[data-theme="dark"] [style*="background-color:#fff"] {
+    background: #111c1a !important;
+}
+
+
+/* =========================================================
+   DARK — INLINE DARK TEXT
+   ========================================================= */
+
+html[data-theme="dark"] [style*="color: #111"],
+html[data-theme="dark"] [style*="color:#111"],
+html[data-theme="dark"] [style*="color: #222"],
+html[data-theme="dark"] [style*="color:#222"],
+html[data-theme="dark"] [style*="color: #333"],
+html[data-theme="dark"] [style*="color:#333"] {
+    color: #eef3f1 !important;
+}
+
+
+/* =========================================================
+   DARK — LINKS
+   ========================================================= */
+
+html[data-theme="dark"] a:not(.btn):not(.btn-pay) {
+    color: #53d9ca;
+}
+
+html[data-theme="dark"] a:not(.btn):not(.btn-pay):hover {
+    color: #8aeee4;
+}
+
+
+/* =========================================================
+   DARK — INVOICE
+   ========================================================= */
+
+html[data-theme="dark"] .invoice-table > div {
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .invoice-table strong,
+html[data-theme="dark"] .invoice-table span {
+    color: #eef3f1 !important;
+}
+
+
+/* =========================================================
+   DARK — PAYMENT
+   ========================================================= */
+
+html[data-theme="dark"] .btn-pay {
+    background: #14b8a6 !important;
+    border-color: #14b8a6 !important;
+    color: #07110f !important;
+}
+
+html[data-theme="dark"] .btn-pay:hover {
+    background: #2dd4bf !important;
+    border-color: #2dd4bf !important;
+    color: #07110f !important;
+}
+
+
+/* =========================================================
+   DARK — EMPTY STATES
+   ========================================================= */
+
+html[data-theme="dark"] .empty-card,
+html[data-theme="dark"] .empty-box {
+    background: #111c1a !important;
+    border-color: #31504a !important;
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .empty-icon {
+    color: #14b8a6 !important;
+}
+
+
+/* =========================================================
+   DARK — DIVIDERS
+   ========================================================= */
+
+html[data-theme="dark"] hr {
+    border-color: #263936 !important;
+    opacity: 1 !important;
+}
+
+html[data-theme="dark"] .drawer-divider {
+    background: #263936 !important;
+}
+
+
+/* =========================================================
+   DARK — MODALS
+   ========================================================= */
+
+html[data-theme="dark"] .modal-content {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .modal-header,
+html[data-theme="dark"] .modal-footer {
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(1);
+}
+
+
+/* =========================================================
+   DARK — DROPDOWNS
+   ========================================================= */
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #111c1a !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover,
+html[data-theme="dark"] .dropdown-item:focus {
+    background: #17302b !important;
+    color: #6ee7d9 !important;
+}
+
+
+/* =========================================================
+   DARK — PAGINATION
+   ========================================================= */
+
+html[data-theme="dark"] .page-link {
+    background: #111c1a !important;
+    border-color: #263936 !important;
+    color: #c9d6d3 !important;
+}
+
+html[data-theme="dark"] .page-link:hover {
+    background: #17302b !important;
+    color: #6ee7d9 !important;
+}
+
+html[data-theme="dark"] .page-item.active .page-link {
+    background: #14b8a6 !important;
+    border-color: #14b8a6 !important;
+    color: #07110f !important;
+}
+
+
+/* =========================================================
+   DARK — CHECKBOX / RADIO
+   ========================================================= */
+
+html[data-theme="dark"] .form-check-label {
+    color: #dce7e4 !important;
+}
+
+html[data-theme="dark"] .form-check-input {
+    background-color: #162421 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .form-check-input:checked {
+    background-color: #14b8a6 !important;
+    border-color: #14b8a6 !important;
+}
+
+
+/* =========================================================
+   DARK — NAVIGATION / FOOTER TEXT
+   ========================================================= */
+
+html[data-theme="dark"] .footer {
+    color: #cbd6d3 !important;
+}
+
+html[data-theme="dark"] .footer a {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] .footer a:hover {
+    color: #53d9ca !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+    .navbar-collapse {
+        padding: 14px 0;
+    }
+
+    .app-nav .navbar-nav {
+        display: none;
+    }
+
+    .drawer-trigger {
+        width: 40px;
+        height: 40px;
+    }
+
+    .app-nav .btn {
+        font-size: .8rem;
+    }
+}
+
+
+@media (max-width: 767px) {
+
+    .hero-premium {
+        padding: 70px 0;
+    }
+
+    .hero-premium h1 {
+        font-size: 3.4rem;
+    }
+
+    .hero-card {
+        margin-top: 10px;
+    }
+
+    .chip-top {
+        right: 5px;
+    }
+
+    .chip-bottom {
+        left: 5px;
+    }
+
+    .cta-card,
+    .dash-hero,
+    .form-card-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section {
+        padding: 70px 0;
+    }
+
+    .form-card,
+    .invoice-card {
+        padding: 22px;
+    }
+
+    .booking-row {
+        align-items: flex-start;
+    }
+
+    .booking-row > .text-end {
+        margin-left: auto;
+    }
+
+    .forecast-row {
+        grid-template-columns: 1fr auto;
+    }
+
+    .forecast-row small {
+        grid-column: 1 / -1;
+    }
+
+    .empty-card {
+        padding: 45px 20px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .customer-page .booking-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-page .booking-header {
+        flex-direction: column;
+    }
+
+    .customer-page .status-badge {
+        align-self: flex-start;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .customer-page .header-inner {
+        padding: 12px 15px;
+    }
+
+    .customer-page .brand-name {
+        font-size: 20px;
+    }
+
+    .customer-page .search-box button {
+        padding: 11px 14px;
+    }
+
+    .customer-page .search-box input {
+        font-size: 13px;
+    }
+
+    .customer-page .service-card {
+        padding: 15px 8px;
+    }
+
+    .customer-page .service-icon {
+        width: 47px;
+        height: 47px;
+        font-size: 21px;
+    }
+
+    .customer-page .booking-card {
+        padding: 15px;
+    }
+}
+
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@media print {
+
+    .app-nav,
+    .footer,
+    .btn {
+        display: none !important;
+    }
+
+    .invoice-card {
+        border: 0;
+        box-shadow: none;
+    }
+}
+
+
+/* =========================================================
+   SAHYOG — FINAL DARK MODE FIX PATCH
+   IMPORTANT:
+   This patch is added after the existing CSS.
+   Nothing from the original stylesheet is removed.
+   It only fixes light/white sections and invisible text
+   when Dark Mode is enabled.
+   ========================================================= */
+
+/* ---------- GLOBAL PAGE BACKGROUNDS ---------- */
+
+html[data-theme="dark"] body {
+    background: #091311 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] main {
+    background: #091311;
+    color: #eef3f1;
+}
+
+html[data-theme="dark"] .section {
+    color: #eef3f1;
+}
+
+html[data-theme="dark"] .section.soft {
+    background: #0d1917 !important;
+}
+
+
+/* ---------- HOME / TRUST SECTION ---------- */
+
+html[data-theme="dark"] .hero-premium {
+    background:
+        radial-gradient(circle at 82% 18%, #123c37 0, transparent 30%),
+        linear-gradient(135deg, #091311 0, #0f201d 100%) !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .hero-premium h1,
+html[data-theme="dark"] .hero-premium h2,
+html[data-theme="dark"] .hero-premium h3,
+html[data-theme="dark"] .hero-premium h4,
+html[data-theme="dark"] .hero-premium h5,
+html[data-theme="dark"] .hero-premium h6 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .hero-copy,
+html[data-theme="dark"] .hero-trust {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .section-heading h3,
+html[data-theme="dark"] .section-heading h4,
+html[data-theme="dark"] .section-heading h5,
+html[data-theme="dark"] .section-heading h6 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .section-heading p {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .trust-list b,
+html[data-theme="dark"] .trust-list strong {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .trust-list small {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .feature-card h4,
+html[data-theme="dark"] .feature-card h5,
+html[data-theme="dark"] .feature-card h6 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .feature-card p {
+    color: #a9b6b3 !important;
+}
+
+
+/* ---------- HOME IMPACT / STAT BLOCK ---------- */
+
+html[data-theme="dark"] .impact-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .impact-grid {
+    background: #263936 !important;
+}
+
+html[data-theme="dark"] .impact-grid div {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .impact-grid strong {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .impact-grid span {
+    color: #a9b6b3 !important;
+}
+
+
+/* ---------- COMMON CARDS ---------- */
+
+html[data-theme="dark"] .feature-card,
+html[data-theme="dark"] .panel-card,
+html[data-theme="dark"] .form-card,
+html[data-theme="dark"] .invoice-card,
+html[data-theme="dark"] .market-card,
+html[data-theme="dark"] .admin-stat,
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .hero-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .feature-card p,
+html[data-theme="dark"] .panel-card p,
+html[data-theme="dark"] .panel-head p,
+html[data-theme="dark"] .stat-card span,
+html[data-theme="dark"] .admin-stat span,
+html[data-theme="dark"] .admin-stat small {
+    color: #a9b6b3 !important;
+}
+
+
+/* ---------- FIND A WORKER ---------- */
+
+html[data-theme="dark"] .search-shell,
+html[data-theme="dark"] .search-box {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .search-shell .form-control,
+html[data-theme="dark"] .search-shell .form-select,
+html[data-theme="dark"] .search-shell .input-group-text,
+html[data-theme="dark"] .search-box input {
+    background: transparent !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .search-box input::placeholder,
+html[data-theme="dark"] .search-shell input::placeholder {
+    color: #71817d !important;
+}
+
+html[data-theme="dark"] .search-icon {
+    color: #8c9b97 !important;
+}
+
+html[data-theme="dark"] .page-title {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .market-card h4,
+html[data-theme="dark"] .market-card h5,
+html[data-theme="dark"] .market-card h6 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .market-card p,
+html[data-theme="dark"] .market-card small {
+    color: #a9b6b3 !important;
+}
+
+
+/* ---------- CUSTOMER + WORKER DASHBOARDS ---------- */
+
+html[data-theme="dark"] .dash-hero {
+    background: linear-gradient(135deg, #111c1a, #142824) !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .dash-hero h1,
+html[data-theme="dark"] .dash-hero h2,
+html[data-theme="dark"] .dash-hero h3 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .dash-hero p {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .panel-card h1,
+html[data-theme="dark"] .panel-card h2,
+html[data-theme="dark"] .panel-card h3,
+html[data-theme="dark"] .panel-card h4,
+html[data-theme="dark"] .panel-card h5,
+html[data-theme="dark"] .panel-card h6 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .booking-row,
+html[data-theme="dark"] .queue-row {
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .quick-grid a {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .quick-grid a:hover {
+    background: #172522 !important;
+    color: #2dd4bf !important;
+}
+
+
+/* ---------- MY BOOKINGS / CUSTOMER LEGACY TEMPLATE ---------- */
+
+html[data-theme="dark"] .customer-page {
+    background: #091311 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .service-card,
+html[data-theme="dark"] .customer-page .booking-card,
+html[data-theme="dark"] .customer-page .stat-card,
+html[data-theme="dark"] .customer-page .account-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .customer-page .service-card h1,
+html[data-theme="dark"] .customer-page .service-card h2,
+html[data-theme="dark"] .customer-page .service-card h3,
+html[data-theme="dark"] .customer-page .service-card h4,
+html[data-theme="dark"] .customer-page .service-card h5,
+html[data-theme="dark"] .customer-page .service-card h6,
+html[data-theme="dark"] .customer-page .booking-card h1,
+html[data-theme="dark"] .customer-page .booking-card h2,
+html[data-theme="dark"] .customer-page .booking-card h3,
+html[data-theme="dark"] .customer-page .booking-card h4,
+html[data-theme="dark"] .customer-page .booking-card h5,
+html[data-theme="dark"] .customer-page .booking-card h6,
+html[data-theme="dark"] .customer-page .welcome-title,
+html[data-theme="dark"] .customer-page .section-title {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .customer-page .welcome-subtitle,
+html[data-theme="dark"] .customer-page .booking-description,
+html[data-theme="dark"] .customer-page .info-label,
+html[data-theme="dark"] .customer-page .account-email,
+html[data-theme="dark"] .customer-page .stat-label {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] .customer-page .booking-info-grid .info-item,
+html[data-theme="dark"] .customer-page .info-item {
+    background: #172421 !important;
+    color: #eef3f1 !important;
+    border-color: #2a403c !important;
+}
+
+html[data-theme="dark"] .customer-page .info-value {
+    color: #e8f1ef !important;
+}
+
+html[data-theme="dark"] .customer-page .payment-box {
+    background: #14221f !important;
+    color: #eef3f1 !important;
+    border-color: #2a403c !important;
+}
+
+
+/* ---------- VERIFICATION STRIP ---------- */
+
+html[data-theme="dark"] .verification-strip {
+    background: #3b301b !important;
+    color: #f7df9d !important;
+}
+
+html[data-theme="dark"] .verification-strip.verified {
+    background: #0d3b36 !important;
+    color: #9be7d8 !important;
+}
+
+html[data-theme="dark"] .verification-icon {
+    background: #172522 !important;
+    color: #6ee7d9 !important;
+}
+
+
+/* ---------- DRAWER ---------- */
+
+html[data-theme="dark"] .side-drawer {
+    background: #101b19 !important;
+    color: #eef3f1 !important;
+    border-left-color: #263936 !important;
+}
+
+html[data-theme="dark"] .drawer-profile {
+    background: #162421 !important;
+}
+
+html[data-theme="dark"] .drawer-profile strong {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .drawer-profile small {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .drawer-close {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .drawer-nav a {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .drawer-nav a:hover {
+    background: #17302b !important;
+    color: #2dd4bf !important;
+}
+
+
+/* ---------- LOGOUT BUTTON ---------- */
+
+.logout-btn {
+    white-space: nowrap;
+}
+
+html[data-theme="dark"] .logout-btn {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .logout-btn:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+}
+
+html[data-theme="dark"] .drawer-logout-button {
+    color: #f28b85 !important;
+}
+
+html[data-theme="dark"] .drawer-logout-button:hover {
+    background: #402322 !important;
+    color: #ffaaa4 !important;
+}
+
+
+/* ---------- FORMS ---------- */
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] input,
+html[data-theme="dark"] select {
+    background: #162421 !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus {
+    background: #172824 !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+}
+
+html[data-theme="dark"] .form-control::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #71817d !important;
+}
+
+html[data-theme="dark"] .form-label {
+    color: #dce7e4 !important;
+}
+
+
+/* ---------- BUTTONS ---------- */
+
+html[data-theme="dark"] .btn-light {
+    background: #172522 !important;
+    border-color: #304641 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .btn-light:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .btn-outline-secondary {
+    color: #cbd6d3 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .btn-outline-secondary:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+}
+
+
+/* ---------- CATEGORY PILLS ---------- */
+
+html[data-theme="dark"] .category-pill {
+    background: #111c1a !important;
+    border-color: #2a403c !important;
+    color: #e8f1ef !important;
+}
+
+html[data-theme="dark"] .category-pill:hover {
+    background: #17302b !important;
+    border-color: #14b8a6 !important;
+    color: #6ee7d9 !important;
+}
+
+
+/* ---------- GENERIC BOOTSTRAP LIGHT/WHITE HELPERS ---------- */
+
+html[data-theme="dark"] .bg-white {
+    background-color: #111c1a !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .bg-light {
+    background-color: #162421 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .text-dark {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .text-secondary {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] hr {
+    border-color: #263936 !important;
+    opacity: 1;
+}
+
+
+/* ---------- TABLES ---------- */
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: #111c1a;
+    --bs-table-color: #eef3f1;
+    --bs-table-border-color: #263936;
+    color: #eef3f1 !important;
+    background: #111c1a !important;
+}
+
+html[data-theme="dark"] .table th,
+html[data-theme="dark"] .table td {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+
+/* ---------- FORECAST / ANALYTICS ---------- */
+
+html[data-theme="dark"] .forecast-tile {
+    background: linear-gradient(145deg, #111c1a, #172824) !important;
+    border-color: #263936 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .forecast-note,
+html[data-theme="dark"] .soft-panel {
+    background: #172421 !important;
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .metric-mini {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #263936 !important;
+}
+
+
+/* ---------- STATUS BADGES ---------- */
+
+html[data-theme="dark"] .status-chip {
+    background: #172522 !important;
+    color: #dce7e4 !important;
+}
+
+html[data-theme="dark"] .status-pending {
+    background: #443518 !important;
+    color: #ffd78a !important;
+}
+
+html[data-theme="dark"] .status-accepted {
+    background: #172c49 !important;
+    color: #9fc1ff !important;
+}
+
+html[data-theme="dark"] .status-in_progress {
+    background: #302650 !important;
+    color: #c5b4ff !important;
+}
+
+html[data-theme="dark"] .status-completed,
+html[data-theme="dark"] .status-paid,
+html[data-theme="dark"] .status-active {
+    background: #0d3b36 !important;
+    color: #6ee7d9 !important;
+}
+
+html[data-theme="dark"] .status-cancelled,
+html[data-theme="dark"] .status-rejected {
+    background: #402322 !important;
+    color: #ffaaa4 !important;
+}
+
+html[data-theme="dark"] .status-on_the_way {
+    background: #16233a !important;
+    color: #8fb3ff !important;
+}
+
+html[data-theme="dark"] .status-arrived {
+    background: #3a2712 !important;
+    color: #ffb877 !important;
+}
+
+
+/* ---------- ALERTS ---------- */
+
+html[data-theme="dark"] .alert-success {
+    background: #103b32 !important;
+    border-color: #1f6e60 !important;
+    color: #9be7d8 !important;
+}
+
+html[data-theme="dark"] .alert-info {
+    background: #172c49 !important;
+    border-color: #28527d !important;
+    color: #a9c8ff !important;
+}
+
+html[data-theme="dark"] .alert-warning {
+    background: #443518 !important;
+    border-color: #765b22 !important;
+    color: #ffd78a !important;
+}
+
+html[data-theme="dark"] .alert-danger {
+    background: #402322 !important;
+    border-color: #753b38 !important;
+    color: #ffaaa4 !important;
+}
+
+
+/* ---------- LIVE TRACKING ---------- */
+
+html[data-theme="dark"] .live-tracking-card {
+    background: #111c1a !important;
+    border-color: #263936 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .live-map {
+    background: #101b19 !important;
+    border-color: #263936 !important;
+}
+
+html[data-theme="dark"] .tracking-metric {
+    background: #172522 !important;
+    border-color: #263936 !important;
+    color: #eef3f1 !important;
+}
+
+
+/* ---------- DARK MODE LINK VISIBILITY ---------- */
+
+html[data-theme="dark"] a:not(.btn):not(.brand):not(.drawer-nav a):not(.quick-grid a) {
+    color: inherit;
+}
+
+html[data-theme="dark"] .back-link {
+    color: #a9b6b3 !important;
+}
+
+html[data-theme="dark"] .back-link:hover {
+    color: #2dd4bf !important;
+}
+
+
+/* ---------- PREVENT WHITE INLINE ELEMENTS ---------- */
+
+html[data-theme="dark"] [style*="background: #fff"],
+html[data-theme="dark"] [style*="background:#fff"],
+html[data-theme="dark"] [style*="background: white"],
+html[data-theme="dark"] [style*="background:white"] {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+}
+
+
+/* ---------- DARK THEME TOGGLE ---------- */
+
+html[data-theme="dark"] .theme-toggle {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+
+/* =========================================================
+   END OF FINAL DARK MODE FIX PATCH
+   ========================================================= */
+
+/* =========================================================
+   FINAL DARK MODE CONSISTENCY FIX
+   Only affects html[data-theme="dark"]
+   ========================================================= */
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] main {
+    background-color: #0b1513 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] body::selection {
+    background: #14b8a6 !important;
+    color: #07110f !important;
+}
+
+/* ---------- AUTH / LOGIN / REGISTER ---------- */
+html[data-theme="dark"] body:has(a[href*="google/login"], a[href*="google"]),
+html[data-theme="dark"] body:has(input[name="username"]:only-child) {
+    background: #0b1513 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .login-card,
+html[data-theme="dark"] .register-card,
+html[data-theme="dark"] .auth-container,
+html[data-theme="dark"] .auth-form,
+html[data-theme="dark"] .form-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .auth-card h1,
+html[data-theme="dark"] .auth-card h2,
+html[data-theme="dark"] .auth-card h3,
+html[data-theme="dark"] .login-card h1,
+html[data-theme="dark"] .login-card h2,
+html[data-theme="dark"] .login-card h3,
+html[data-theme="dark"] .register-card h1,
+html[data-theme="dark"] .register-card h2,
+html[data-theme="dark"] .register-card h3 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] label,
+html[data-theme="dark"] .form-label {
+    color: #dce7e4 !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select {
+    background-color: #162421 !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] select:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus {
+    background-color: #172824 !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+    box-shadow: 0 0 0 .2rem rgba(20,184,166,.16) !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder,
+html[data-theme="dark"] .form-control::placeholder {
+    color: #71817d !important;
+}
+
+/* Chrome autofill was responsible for the light-blue login fields. */
+html[data-theme="dark"] input:-webkit-autofill,
+html[data-theme="dark"] input:-webkit-autofill:hover,
+html[data-theme="dark"] input:-webkit-autofill:focus,
+html[data-theme="dark"] textarea:-webkit-autofill,
+html[data-theme="dark"] select:-webkit-autofill {
+    -webkit-text-fill-color: #eef3f1 !important;
+    -webkit-box-shadow: 0 0 0 1000px #162421 inset !important;
+    box-shadow: 0 0 0 1000px #162421 inset !important;
+    caret-color: #eef3f1 !important;
+}
+
+/* Google sign-in button/link */
+html[data-theme="dark"] a[href*="google/login"],
+html[data-theme="dark"] a[href*="google"].google-btn,
+html[data-theme="dark"] .google-btn,
+html[data-theme="dark"] .google-login,
+html[data-theme="dark"] button.google-btn {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border: 1px solid #40534f !important;
+}
+
+html[data-theme="dark"] a[href*="google/login"]:hover,
+html[data-theme="dark"] .google-btn:hover,
+html[data-theme="dark"] .google-login:hover {
+    background: #172522 !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+}
+
+/* Auth separator / secondary text / links */
+html[data-theme="dark"] .auth-card .text-muted,
+html[data-theme="dark"] .login-card .text-muted,
+html[data-theme="dark"] .register-card .text-muted,
+html[data-theme="dark"] .auth-container .text-muted {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] .auth-card a:not(.btn),
+html[data-theme="dark"] .login-card a:not(.btn),
+html[data-theme="dark"] .register-card a:not(.btn) {
+    color: #2dd4bf !important;
+}
+
+/* ---------- BOOKING / SERVICE SEARCH ---------- */
+html[data-theme="dark"] .service-list,
+html[data-theme="dark"] .services-page,
+html[data-theme="dark"] .booking-page,
+html[data-theme="dark"] .booking-form,
+html[data-theme="dark"] .search-page {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .service-card,
+html[data-theme="dark"] .worker-card,
+html[data-theme="dark"] .booking-card,
+html[data-theme="dark"] .booking-form-card,
+html[data-theme="dark"] .search-card,
+html[data-theme="dark"] .location-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .service-card h1,
+html[data-theme="dark"] .service-card h2,
+html[data-theme="dark"] .service-card h3,
+html[data-theme="dark"] .service-card h4,
+html[data-theme="dark"] .service-card h5,
+html[data-theme="dark"] .worker-card h1,
+html[data-theme="dark"] .worker-card h2,
+html[data-theme="dark"] .worker-card h3,
+html[data-theme="dark"] .worker-card h4,
+html[data-theme="dark"] .booking-card h1,
+html[data-theme="dark"] .booking-card h2,
+html[data-theme="dark"] .booking-card h3,
+html[data-theme="dark"] .booking-card h4 {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .service-card .text-muted,
+html[data-theme="dark"] .worker-card .text-muted,
+html[data-theme="dark"] .booking-card .text-muted,
+html[data-theme="dark"] .booking-form-card .text-muted {
+    color: #9eadaa !important;
+}
+
+/* Search/location controls */
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search-box,
+html[data-theme="dark"] .location-search,
+html[data-theme="dark"] .location-box,
+html[data-theme="dark"] .service-search,
+html[data-theme="dark"] .booking-controls {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] [class*="location"] .form-control,
+html[data-theme="dark"] [class*="location"] .form-select,
+html[data-theme="dark"] [class*="search"] .form-control,
+html[data-theme="dark"] [class*="search"] .form-select {
+    background: #162421 !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+/* Book Now / Schedule / mode selectors */
+html[data-theme="dark"] [data-booking-type],
+html[data-theme="dark"] [data-booking-mode],
+html[data-theme="dark"] .booking-type-btn,
+html[data-theme="dark"] .booking-mode-btn,
+html[data-theme="dark"] .booking-toggle,
+html[data-theme="dark"] .mode-toggle {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] [data-booking-type].active,
+html[data-theme="dark"] [data-booking-mode].active,
+html[data-theme="dark"] .booking-type-btn.active,
+html[data-theme="dark"] .booking-mode-btn.active,
+html[data-theme="dark"] .booking-toggle.active,
+html[data-theme="dark"] .mode-toggle.active,
+html[data-theme="dark"] [data-booking-type][aria-pressed="true"],
+html[data-theme="dark"] [data-booking-mode][aria-pressed="true"] {
+    background: #14b8a6 !important;
+    color: #07110f !important;
+    border-color: #14b8a6 !important;
+}
+
+html[data-theme="dark"] .btn-light,
+html[data-theme="dark"] .btn-outline-dark {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .btn-light:hover,
+html[data-theme="dark"] .btn-outline-dark:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+}
+
+/* Date/time native controls */
+html[data-theme="dark"] input[type="date"],
+html[data-theme="dark"] input[type="time"],
+html[data-theme="dark"] input[type="datetime-local"] {
+    color-scheme: dark;
+}
+
+html[data-theme="dark"] option {
+    background: #162421 !important;
+    color: #eef3f1 !important;
+}
+
+/* ---------- PAYMENT / CASH / RAZORPAY SURROUNDING UI ---------- */
+html[data-theme="dark"] .payment-card,
+html[data-theme="dark"] .payment-page,
+html[data-theme="dark"] .payment-method,
+html[data-theme="dark"] .payment-option,
+html[data-theme="dark"] .razorpay-card,
+html[data-theme="dark"] .cash-payment-card,
+html[data-theme="dark"] .cash-collection-card,
+html[data-theme="dark"] .billing-card,
+html[data-theme="dark"] .invoice-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .payment-card .text-muted,
+html[data-theme="dark"] .payment-page .text-muted,
+html[data-theme="dark"] .payment-option .text-muted,
+html[data-theme="dark"] .billing-card .text-muted,
+html[data-theme="dark"] .invoice-card .text-muted {
+    color: #9eadaa !important;
+}
+
+html[data-theme="dark"] .payment-method:hover,
+html[data-theme="dark"] .payment-option:hover {
+    background: #172522 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .payment-method.active,
+html[data-theme="dark"] .payment-option.active,
+html[data-theme="dark"] .payment-option.selected {
+    background: #0d302b !important;
+    border-color: #14b8a6 !important;
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .billing-card,
+html[data-theme="dark"] .billing-summary,
+html[data-theme="dark"] .billing-charge-row {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .billing-pending {
+    color: #f6c453 !important;
+}
+
+html[data-theme="dark"] .billing-approved {
+    color: #69d7a7 !important;
+}
+
+/* Cash/online buttons */
+html[data-theme="dark"] .cash-btn,
+html[data-theme="dark"] .cash-payment-btn,
+html[data-theme="dark"] [data-payment-method="cash"],
+html[data-theme="dark"] button[value="cash"] {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+html[data-theme="dark"] .cash-btn:hover,
+html[data-theme="dark"] .cash-payment-btn:hover,
+html[data-theme="dark"] [data-payment-method="cash"]:hover,
+html[data-theme="dark"] button[value="cash"]:hover {
+    background: #20342f !important;
+    color: #ffffff !important;
+    border-color: #14b8a6 !important;
+}
+
+/* ---------- DASHBOARD GENERIC WHITE SURFACES ---------- */
+html[data-theme="dark"] .card.bg-white,
+html[data-theme="dark"] .card.bg-light,
+html[data-theme="dark"] .bg-white.card,
+html[data-theme="dark"] .bg-light.card,
+html[data-theme="dark"] .white-card,
+html[data-theme="dark"] .surface-card {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: #111c1a !important;
+    --bs-table-color: #eef3f1 !important;
+    --bs-table-border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .table > :not(caption) > * > * {
+    background-color: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #111c1a !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover,
+html[data-theme="dark"] .dropdown-item:focus {
+    background: #17302b !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .modal-content {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .modal-header,
+html[data-theme="dark"] .modal-footer {
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(1) brightness(2) !important;
+}
+
+/* ---------- ALERTS / BADGES / STATUS ---------- */
+html[data-theme="dark"] .badge.bg-light,
+html[data-theme="dark"] .badge.text-dark,
+html[data-theme="dark"] .status-badge.bg-light {
+    background: #172522 !important;
+    color: #eef3f1 !important;
+    border-color: #40534f !important;
+}
+
+/* Keep maps functional while their surrounding UI becomes dark. */
+html[data-theme="dark"] .leaflet-control-zoom a,
+html[data-theme="dark"] .leaflet-control-layers,
+html[data-theme="dark"] .leaflet-bar a {
+    background: #111c1a !important;
+    color: #eef3f1 !important;
+    border-color: #304641 !important;
+}
+
+html[data-theme="dark"] .leaflet-control-attribution {
+    background: rgba(17,28,26,.88) !important;
+    color: #cbd6d3 !important;
+}
+
+/* ---------- FINAL HIGH-SPECIFICITY OVERRIDES ---------- */
+html[data-theme="dark"] .text-dark,
+html[data-theme="dark"] .text-body,
+html[data-theme="dark"] .text-black {
+    color: #eef3f1 !important;
+}
+
+html[data-theme="dark"] .border-dark,
+html[data-theme="dark"] .border-secondary {
+    border-color: #40534f !important;
+}
+
+/* =========================================================
+   END — FINAL DARK MODE CONSISTENCY FIX
+   ========================================================= */

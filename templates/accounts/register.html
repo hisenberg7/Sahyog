@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account — Sahyog{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-6 col-md-8">
+
+                <div class="text-center mb-4">
+
+                    <div class="brand-icon mx-auto mb-3">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+
+                    <h1 class="fw-bold">
+                        Create your Sahyog account
+                    </h1>
+
+                    <p class="text-secondary">
+                        Join the community and get started today.
+                    </p>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- ROLE -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                I want to
+                            </label>
+
+                            {{ form.role }}
+
+                            {% if form.role.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.role.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- NAME -->
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-semibold">
+                                    First name
+                                </label>
+
+                                {{ form.first_name }}
+
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.first_name.errors }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-semibold">
+                                    Last name
+                                </label>
+
+                                {{ form.last_name }}
+
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.last_name.errors }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- USERNAME -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Username
+                            </label>
+
+                            {{ form.username }}
+
+                            {% if form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Email
+                            </label>
+
+                            {{ form.email }}
+
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Phone number
+                            </label>
+
+                            {{ form.phone }}
+
+                            {% if form.phone.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.phone.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Address
+                            </label>
+
+                            {{ form.address }}
+
+                            {% if form.address.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.address.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            {{ form.password }}
+
+                            {% if form.password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Confirm password
+                            </label>
+
+                            {{ form.confirm_password }}
+
+                            {% if form.confirm_password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.confirm_password.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-dark w-100 py-3"
+                        >
+                            Create Account
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <p class="text-center text-secondary mt-4 mb-0">
+                    Already have an account?
+    <a
+ href="{% url 'login' %}"
+    class="text-dark fw-semibold"
+>
+    Login
+</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

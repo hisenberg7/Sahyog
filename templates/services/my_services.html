@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}My Services — Sahyog{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <!-- Header -->
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5">
+
+            <div>
+
+                <div class="hero-badge mb-3">
+                    <i class="bi bi-tools"></i>
+                    Worker Services
+                </div>
+
+                <h1 class="fw-bold mb-2">
+                    My Services
+                </h1>
+
+                <p class="text-secondary mb-0">
+                    Manage the services you provide to Sahyog customers.
+                </p>
+
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'services:add_service' %}"
+                    class="btn btn-dark"
+                >
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Add Service
+                </a>
+
+                <a
+                    href="{% url 'worker_dashboard' %}"
+                    class="btn btn-outline-dark"
+                >
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Messages -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- Services -->
+
+        {% if services %}
+
+            <div class="row g-4">
+
+                {% for service in services %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="service-card h-100 d-flex flex-column">
+
+                            <!-- Icon + Availability -->
+
+                            <div class="d-flex justify-content-between align-items-start">
+
+                                <div class="service-icon">
+
+                                    {% if service.category == "electrician" %}
+                                        <i class="bi bi-lightning-charge"></i>
+
+                                    {% elif service.category == "plumber" %}
+                                        <i class="bi bi-droplet"></i>
+
+                                    {% elif service.category == "carpenter" %}
+                                        <i class="bi bi-hammer"></i>
+
+                                    {% elif service.category == "painter" %}
+                                        <i class="bi bi-palette"></i>
+
+                                    {% elif service.category == "cleaner" %}
+                                        <i class="bi bi-stars"></i>
+
+                                    {% elif service.category == "caregiver" %}
+                                        <i class="bi bi-heart"></i>
+
+                                    {% elif service.category == "driver" %}
+                                        <i class="bi bi-car-front"></i>
+
+                                    {% elif service.category == "gardener" %}
+                                        <i class="bi bi-flower1"></i>
+
+                                    {% elif service.category == "technician" %}
+                                        <i class="bi bi-gear"></i>
+
+                                    {% else %}
+                                        <i class="bi bi-tools"></i>
+                                    {% endif %}
+
+                                </div>
+
+
+                                {% if service.is_available %}
+
+                                    <span class="badge text-bg-success">
+                                        Available
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge text-bg-secondary">
+                                        Unavailable
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- Service Information -->
+
+                            <div class="mt-3">
+
+                                <h4 class="fw-bold mb-2">
+                                    {{ service.name }}
+                                </h4>
+
+                                <span class="badge bg-light text-dark border mb-3">
+                                    {{ service.get_category_display }}
+                                </span>
+
+                                <p class="text-secondary">
+                                    {{ service.description|truncatewords:25 }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- Details -->
+
+                            <div class="mt-auto">
+
+                                <div class="row g-2 mb-4">
+
+                                    <!-- Price -->
+
+                                    <div class="col-6">
+
+                                        <div class="border rounded-3 p-3 h-100">
+
+                                            <small class="text-secondary d-block">
+                                                Price
+                                            </small>
+
+                                            <strong>
+                                                ₹{{ service.base_price }}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Experience -->
+
+                                    <div class="col-6">
+
+                                        <div class="border rounded-3 p-3 h-100">
+
+                                            <small class="text-secondary d-block">
+                                                Experience
+                                            </small>
+
+                                            <strong>
+                                                {{ service.experience }}
+                                                year{{ service.experience|pluralize }}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Actions -->
+
+                                <div class="d-flex gap-2">
+
+                                    <a
+                                        href="{% url 'services:edit_service' service.id %}"
+                                        class="btn btn-outline-dark flex-fill"
+                                    >
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Edit
+                                    </a>
+
+                                    <a
+                                        href="{% url 'services:delete_service' service.id %}"
+                                        class="btn btn-outline-danger flex-fill"
+                                    >
+                                        <i class="bi bi-trash me-1"></i>
+                                        Delete
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <!-- Empty State -->
+
+            <div class="service-card text-center py-5">
+
+                <div class="service-icon mx-auto">
+
+                    <i class="bi bi-tools"></i>
+
+                </div>
+
+                <h3 class="fw-bold mt-4">
+                    No Services Added Yet
+                </h3>
+
+                <p class="text-secondary mb-4">
+                    Add your first service so customers can discover and book you.
+                </p>
+
+                <a
+                    href="{% url 'services:add_service' %}"
+                    class="btn btn-dark"
+                >
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Add Your First Service
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

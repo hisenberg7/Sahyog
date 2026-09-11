@@ -1,0 +1,577 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment — Sahyog{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <div class="hero-badge mb-3">
+                        <i class="bi bi-shield-check"></i>
+                        Secure Payment
+                    </div>
+
+                    <h1 class="fw-bold mb-2">
+                        Complete Your Payment
+                    </h1>
+
+                    <p class="text-secondary">
+                        Pay securely through Razorpay or choose cash payment.
+                    </p>
+                </div>
+
+
+                <!-- Payment Card -->
+                <div class="service-card">
+
+                    <!-- Booking Info -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <small class="text-secondary">
+                                Booking
+                            </small>
+
+                            <h4 class="fw-bold mb-0">
+                                #{{ booking.id }}
+                            </h4>
+                        </div>
+
+                        <div class="text-end">
+                            <small class="text-secondary">
+                                Final Amount
+                            </small>
+
+                            <h3 class="fw-bold mb-0">
+                                ₹{{ booking.amount }}
+                            </h3>
+                        </div>
+                    </div>
+
+
+                    <hr class="mb-4">
+
+
+                    <!-- Service -->
+                    <div class="mb-4">
+                        <small class="text-secondary d-block">
+                            Service
+                        </small>
+
+                        <strong>
+                            {{ booking.service.name }}
+                        </strong>
+                    </div>
+
+
+                    <!-- Billing Breakdown -->
+                    <div class="border rounded-4 p-4 mb-4">
+
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-receipt me-2"></i>
+                            Billing Summary
+                        </h5>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">
+                                Base service
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.base_amount }}
+                            </strong>
+                        </div>
+
+
+                        {% if booking.emergency_fee %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">
+                                Emergency fee
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.emergency_fee }}
+                            </strong>
+                        </div>
+                        {% endif %}
+
+
+                        {% if booking.approved_extra_amount %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">
+                                Approved extras
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.approved_extra_amount }}
+                            </strong>
+                        </div>
+                        {% endif %}
+
+
+                        <hr>
+
+
+                        <div class="d-flex justify-content-between">
+                            <strong>
+                                Final payable
+                            </strong>
+
+                            <strong class="fs-5">
+                                ₹{{ booking.amount }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Payment Method -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Choose Payment Method
+                        </label>
+
+                        <div class="d-flex gap-2" role="group">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-dark flex-fill rounded-3 method-btn active"
+                                data-method="razorpay"
+                            >
+                                <i class="bi bi-credit-card me-1"></i>
+                                Online Payment
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-dark flex-fill rounded-3 method-btn"
+                                data-method="cash"
+                            >
+                                <i class="bi bi-cash-coin me-1"></i>
+                                Cash
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Razorpay Section -->
+                    <div id="razorpay-section">
+
+                        <div class="border rounded-4 p-4 text-center">
+
+                            <div class="mb-3">
+                                <i
+                                    class="bi bi-shield-lock"
+                                    style="font-size: 2.5rem;"
+                                ></i>
+                            </div>
+
+                            <h5 class="fw-bold mb-2">
+                                Secure Razorpay Checkout
+                            </h5>
+
+                            <p class="text-secondary mb-4">
+                                Pay securely using UPI, cards, net banking or supported payment methods.
+                            </p>
+
+                            <div class="small text-secondary mb-3">
+                                Amount to pay
+                            </div>
+
+                            <div class="fw-bold fs-3 mb-4">
+                                ₹{{ booking.amount }}
+                            </div>
+
+                            <button
+                                type="button"
+                                id="razorpay-pay-btn"
+                                class="btn btn-dark btn-lg w-100"
+                            >
+                                <i class="bi bi-lock-fill me-2"></i>
+                                Pay ₹{{ booking.amount }} Securely
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Cash Note -->
+                    <div
+                        id="cash-note"
+                        class="alert alert-light border rounded-4 d-none mt-4"
+                    >
+                        <i class="bi bi-cash-coin me-2"></i>
+
+                        Pay
+                        <strong>₹{{ booking.amount }}</strong>
+                        in cash directly to the worker.
+
+                        The cooperative will confirm the cash collection.
+                    </div>
+
+
+                    <!-- Payment Form -->
+                    <form
+                        method="POST"
+                        class="mt-4"
+                        id="payment-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="payment_method"
+                            id="payment_method_input"
+                            value="razorpay"
+                        >
+
+                        <!-- Razorpay response fields -->
+                        <input
+                            type="hidden"
+                            name="razorpay_payment_id"
+                            id="razorpay_payment_id"
+                            value=""
+                        >
+
+                        <input
+                            type="hidden"
+                            name="razorpay_order_id"
+                            id="razorpay_order_id"
+                            value=""
+                        >
+
+                        <input
+                            type="hidden"
+                            name="razorpay_signature"
+                            id="razorpay_signature"
+                            value=""
+                        >
+
+
+                        <!-- Cash Submit -->
+                        <button
+                            type="submit"
+                            id="cash-submit-btn"
+                            class="btn btn-dark btn-lg w-100 d-none"
+                        >
+                            <i class="bi bi-cash-coin me-2"></i>
+                            Confirm Cash Payment
+                        </button>
+
+                    </form>
+
+
+                    <!-- Existing Payment Status -->
+                    {% if payment.status == "submitted" %}
+                    <div class="alert alert-warning border rounded-4 mt-4">
+                        <i class="bi bi-hourglass-split me-2"></i>
+
+                        Your payment has been submitted and is waiting for
+                        cooperative verification.
+                    </div>
+                    {% elif payment.status == "verified" %}
+                    <div class="alert alert-success border rounded-4 mt-4">
+                        <i class="bi bi-check-circle me-2"></i>
+
+                        Your payment has been verified successfully.
+                    </div>
+                    {% elif payment.status == "rejected" %}
+                    <div class="alert alert-danger border rounded-4 mt-4">
+                        <i class="bi bi-x-circle me-2"></i>
+
+                        Your previous payment was rejected.
+
+                        {% if payment.rejection_reason %}
+                        <div class="mt-2">
+                            {{ payment.rejection_reason }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+
+                    <!-- Verification Note -->
+                    <div class="text-center mt-4">
+                        <small class="text-secondary">
+                            <i class="bi bi-shield-check me-1"></i>
+                            Online payments are processed through Razorpay.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+(function () {
+
+    const buttons = document.querySelectorAll(".method-btn");
+
+    const input = document.getElementById(
+        "payment_method_input"
+    );
+
+    const razorpaySection = document.getElementById(
+        "razorpay-section"
+    );
+
+    const cashNote = document.getElementById(
+        "cash-note"
+    );
+
+    const cashSubmitBtn = document.getElementById(
+        "cash-submit-btn"
+    );
+
+    const paymentForm = document.getElementById(
+        "payment-form"
+    );
+
+    const razorpayPayBtn = document.getElementById(
+        "razorpay-pay-btn"
+    );
+
+    const paymentIdInput = document.getElementById(
+        "razorpay_payment_id"
+    );
+
+    const orderIdInput = document.getElementById(
+        "razorpay_order_id"
+    );
+
+    const signatureInput = document.getElementById(
+        "razorpay_signature"
+    );
+
+
+    /*
+     * Keep the amount in paise for Razorpay.
+     * Django will provide the final booking amount.
+     */
+    const amountInPaise = Math.round(
+        Number("{{ booking.amount }}") * 100
+    );
+
+
+    /*
+     * This value will be provided by the Django backend
+     * after Razorpay order creation.
+     */
+    const razorpayOrderId =
+        "{{ razorpay_order_id|default:''|escapejs }}";
+
+
+    const razorpayKeyId =
+        "{{ razorpay_key_id|default:''|escapejs }}";
+
+
+    /*
+     * Payment method switching
+     */
+    buttons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            buttons.forEach(function (btn) {
+                btn.classList.remove(
+                    "active",
+                    "btn-dark"
+                );
+
+                btn.classList.add(
+                    "btn-outline-dark"
+                );
+            });
+
+
+            button.classList.add(
+                "active",
+                "btn-dark"
+            );
+
+            button.classList.remove(
+                "btn-outline-dark"
+            );
+
+
+            const method = button.dataset.method;
+
+            input.value = method;
+
+
+            if (method === "cash") {
+
+                razorpaySection.classList.add(
+                    "d-none"
+                );
+
+                cashNote.classList.remove(
+                    "d-none"
+                );
+
+                cashSubmitBtn.classList.remove(
+                    "d-none"
+                );
+
+            } else {
+
+                razorpaySection.classList.remove(
+                    "d-none"
+                );
+
+                cashNote.classList.add(
+                    "d-none"
+                );
+
+                cashSubmitBtn.classList.add(
+                    "d-none"
+                );
+
+            }
+
+        });
+
+    });
+
+
+    /*
+     * Razorpay Checkout
+     */
+    if (razorpayPayBtn) {
+
+        razorpayPayBtn.addEventListener(
+            "click",
+            function () {
+
+                if (!razorpayKeyId) {
+
+                    alert(
+                        "Razorpay is not configured yet. Please try again after the payment configuration is completed."
+                    );
+
+                    return;
+                }
+
+
+                if (!razorpayOrderId) {
+
+                    alert(
+                        "Razorpay order could not be created. Please refresh the page and try again."
+                    );
+
+                    return;
+                }
+
+
+                const options = {
+
+                    key: razorpayKeyId,
+
+                    amount: amountInPaise,
+
+                    currency: "INR",
+
+                    name: "Sahyog",
+
+                    description:
+                        "Payment for Sahyog Booking #{{ booking.id }}",
+
+                    order_id: razorpayOrderId,
+
+
+                    handler: function (response) {
+
+                        paymentIdInput.value =
+                            response.razorpay_payment_id || "";
+
+                        orderIdInput.value =
+                            response.razorpay_order_id || "";
+
+                        signatureInput.value =
+                            response.razorpay_signature || "";
+
+
+                        input.value = "razorpay";
+
+
+                        razorpayPayBtn.disabled = true;
+
+                        razorpayPayBtn.innerHTML =
+                            '<i class="bi bi-hourglass-split me-2"></i>Verifying Payment...';
+
+
+                        paymentForm.submit();
+
+                    },
+
+
+                    modal: {
+
+                        ondismiss: function () {
+
+                            razorpayPayBtn.disabled = false;
+
+                            razorpayPayBtn.innerHTML =
+                                '<i class="bi bi-lock-fill me-2"></i>Pay ₹{{ booking.amount }} Securely';
+
+                        }
+
+                    },
+
+
+                    theme: {
+                        color: "#159c8f"
+                    }
+
+                };
+
+
+                const razorpay =
+                    new Razorpay(options);
+
+
+                razorpay.on(
+                    "payment.failed",
+                    function () {
+
+                        alert(
+                            "Payment failed or was cancelled. Please try again."
+                        );
+
+                        razorpayPayBtn.disabled = false;
+
+                        razorpayPayBtn.innerHTML =
+                            '<i class="bi bi-lock-fill me-2"></i>Pay ₹{{ booking.amount }} Securely';
+
+                    }
+                );
+
+
+                razorpay.open();
+
+            }
+        );
+
+    }
+
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Rate Service — Sahyog{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6 col-md-8">
+
+            <!-- Back -->
+            <div class="mb-4">
+                <a href="{% url 'customer_dashboard' %}"
+                   class="text-decoration-none text-muted">
+                    ← Back to Dashboard
+                </a>
+            </div>
+
+
+            <!-- Rating Card -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <!-- Header -->
+                <div class="p-4 text-white"
+                     style="background: linear-gradient(135deg, #008f87, #00b8a9);">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div
+                            class="rounded-circle d-flex align-items-center justify-content-center"
+                            style="
+                                width:55px;
+                                height:55px;
+                                background:rgba(255,255,255,0.18);
+                                font-size:25px;
+                            "
+                        >
+                            ⭐
+                        </div>
+
+                        <div>
+                            <h4 class="mb-1 fw-bold">
+                                Rate Your Experience
+                            </h4>
+
+                            <p class="mb-0 opacity-75">
+                                Your feedback helps workers improve
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Body -->
+                <div class="p-4 p-md-5">
+
+                    <!-- Service Info -->
+                    <div class="bg-light rounded-4 p-3 mb-4">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <small class="text-muted">
+                                    Service
+                                </small>
+
+                                <h5 class="fw-bold mb-1">
+                                    {{ booking.service.name }}
+                                </h5>
+
+                                <div class="text-muted small">
+                                    Provider:
+                                    <strong>
+                                        {{ booking.worker.user.username }}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                            <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                                Completed
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Rating Form -->
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+
+                        <!-- Rating -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                How was your experience?
+                            </label>
+
+                            {{ form.rating }}
+
+                            {% if form.rating.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.rating.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Feedback -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Share your feedback
+                                <span class="text-muted fw-normal">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            {{ form.comment }}
+
+                            {% if form.comment.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.comment.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Submit -->
+                        <button
+                            type="submit"
+                            class="btn w-100 text-white fw-semibold py-3 rounded-3"
+                            style="
+                                background:#008f87;
+                                border:none;
+                            "
+                        >
+                            ⭐ Submit Rating & Review
+                        </button>
+
+                    </form>
+
+
+                    <!-- Privacy Note -->
+                    <div class="text-center mt-4">
+
+                        <small class="text-muted">
+                            Your feedback helps build a trusted
+                            community of service providers.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+venv/
+.env
+__pycache__/
+*.py[cod]
+*.sqlite3
+media/
+staticfiles/
+.vscode/
+.idea/
+.venv/
+oracle_data.json
+oracle_data_clean.json
+oracle_data_utf8.json

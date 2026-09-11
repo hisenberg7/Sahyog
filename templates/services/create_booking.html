@@ -1,0 +1,71 @@
+{% extends "base.html" %}{% block title %}Book {{ service.name }} — Sahyog{% endblock %}{% block content %}
+<section class="form-page"><div class="container"><div class="row justify-content-center"><div class="col-xl-8"><a href="{% url 'services:service_list' %}" class="back-link"><i class="bi bi-arrow-left"></i> Back to services</a>{% if is_emergency %}<div class="emergency-banner mt-3"><div class="emergency-icon"><i class="bi bi-lightning-charge-fill"></i></div><div><strong>Emergency request</strong><p>We’ll prioritize this booking with the verified worker network.</p></div></div>{% endif %}<div class="form-card mt-3"><div class="form-card-head"><div><span class="eyebrow">Booking request</span><h1>{{ service.name }}</h1><p>{{ service.description|default:"Professional local service" }}</p></div><div class="price-badge">₹{{ service.base_price }}</div></div><div class="worker-summary"><div class="avatar">{{ worker_profile.user.first_name|default:worker_profile.user.username|slice:':1'|upper }}</div><div><strong>{{ worker_profile.display_name }}</strong><div class="small text-muted">{{ worker_profile.skill|default:service.category|title }} · {{ worker_profile.experience }} years · ★ {{ worker_profile.rating|default:'New' }}</div></div><span class="verified-pill ms-auto"><i class="bi bi-patch-check-fill"></i> Verified</span></div>{% if preview_distance %}<div class="distance-line mt-2"><i class="bi bi-signpost-2"></i> {{ preview_distance }} km away <span>·</span> ETA ~{{ preview_eta }} min (approximate, based on stored location)</div>{% endif %}<form method="post" class="mt-4">{% csrf_token %}{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}<input type="hidden" name="booking_type" id="bookingTypeInput" value="{{ booking_type|default:'now' }}"><div class="mb-3"><label class="form-label fw-semibold">When do you need this?</label><div class="d-flex gap-2" role="group"><button type="button" class="btn btn-outline-dark flex-fill rounded-3 booking-type-btn {% if booking_type != 'schedule' %}active{% endif %}" data-type="now"><i class="bi bi-lightning-charge me-1"></i> Book Now</button><button type="button" class="btn btn-outline-dark flex-fill rounded-3 booking-type-btn {% if booking_type == 'schedule' %}active{% endif %}" data-type="schedule"><i class="bi bi-calendar-week me-1"></i> Schedule</button></div></div><div class="mb-3"><label class="form-label fw-semibold">Select Service Location</label><div class="d-flex gap-2 flex-wrap mb-2"><button class="btn btn-light rounded-3" type="button" id="useMyLocationBtn"><i class="bi bi-crosshair me-2"></i>Use my current location</button><span id="selectedCoords" class="small text-muted align-self-center">No location selected yet — click the map or use your location.</span></div><div id="pickerMap" class="rounded-4" style="height:320px;border:1px solid var(--line)"></div><div id="pickerError" class="text-danger small mt-2 d-none">Please select your location manually on the map.</div></div><div class="mb-3"><label class="form-label">Service address</label>{{ form.address }}{% if form.address.errors %}<div class="text-danger small">{{ form.address.errors }}</div>{% endif %}{% if form.non_field_errors %}<div class="text-danger small">{{ form.non_field_errors }}</div>{% endif %}</div><div class="row g-3" id="scheduleFields" style="{% if booking_type != 'schedule' %}display:none{% endif %}"><div class="col-md-6"><label class="form-label">Date</label>{{ form.scheduled_date }}</div><div class="col-md-6"><label class="form-label">Time</label>{{ form.scheduled_time }}</div></div><div id="nowNote" class="small text-muted mb-1" style="{% if booking_type == 'schedule' %}display:none{% endif %}">This will be booked for right now.</div><div class="info-strip mt-4"><i class="bi bi-shield-check"></i><span>Your location is used only to improve worker matching.</span></div><button class="btn btn-primary-custom btn-lg w-100 rounded-3 mt-4" id="bookingSubmitBtn">{% if is_emergency %}<i class="bi bi-lightning-charge-fill me-2"></i>Send Emergency Request{% else %}<i class="bi bi-calendar-check me-2"></i>Confirm Booking Request{% endif %}</button></form></div></div></div></div></section>
+{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block extra_js %}<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+(function(){
+  var latField = document.getElementById('id_latitude');
+  var lngField = document.getElementById('id_longitude');
+  var coordsLabel = document.getElementById('selectedCoords');
+  var errorBox = document.getElementById('pickerError');
+  var wLat = {{ worker_profile.latitude|default:'null' }}, wLng = {{ worker_profile.longitude|default:'null' }};
+  var initLat = parseFloat("{{ customer_lat }}"), initLng = parseFloat("{{ customer_lng }}");
+  var centerLat = !isNaN(initLat) ? initLat : (wLat || 22.9734);
+  var centerLng = !isNaN(initLng) ? initLng : (wLng || 78.6569);
+
+  var map = L.map('pickerMap').setView([centerLat, centerLng], !isNaN(initLat) ? 14 : (wLat ? 12 : 5));
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var marker = null;
+  function setSelected(lat, lng) {
+    lat = Math.round(lat * 1e6) / 1e6; lng = Math.round(lng * 1e6) / 1e6;
+    latField.value = lat; lngField.value = lng;
+    coordsLabel.textContent = 'Selected: ' + lat + ', ' + lng;
+    errorBox.classList.add('d-none');
+    if (marker) { marker.setLatLng([lat, lng]); }
+    else { marker = L.marker([lat, lng], {draggable: true}).addTo(map); marker.on('dragend', function(){ var p = marker.getLatLng(); setSelected(p.lat, p.lng); }); }
+  }
+
+  if (wLat && wLng) L.circleMarker([wLat, wLng], {radius: 7, color: '#0d9488', fillColor: '#0d9488', fillOpacity: 0.9}).addTo(map).bindPopup('{{ worker_profile.display_name|escapejs }}');
+
+  map.on('click', function(e){ setSelected(e.latlng.lat, e.latlng.lng); });
+
+  if (!isNaN(initLat) && !isNaN(initLng)) setSelected(initLat, initLng);
+
+  document.getElementById('useMyLocationBtn').addEventListener('click', function(){
+    if (!navigator.geolocation) { errorBox.textContent = 'Geolocation is not supported by this browser. Please select your location manually on the map.'; errorBox.classList.remove('d-none'); return; }
+    navigator.geolocation.getCurrentPosition(function(pos){
+      setSelected(pos.coords.latitude, pos.coords.longitude);
+      map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+    }, function(){
+      errorBox.textContent = 'Location permission denied. Please select your location manually on the map.';
+      errorBox.classList.remove('d-none');
+    });
+  });
+
+  document.getElementById('bookingSubmitBtn').closest('form').addEventListener('submit', function(e){
+    if (!latField.value || !lngField.value) {
+      e.preventDefault();
+      errorBox.textContent = 'Please select your service location on the map before confirming.';
+      errorBox.classList.remove('d-none');
+      document.getElementById('pickerMap').scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+  });
+
+  // Book Now / Schedule toggle
+  var typeInput = document.getElementById('bookingTypeInput');
+  var scheduleFields = document.getElementById('scheduleFields');
+  var nowNote = document.getElementById('nowNote');
+  document.querySelectorAll('.booking-type-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.booking-type-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      typeInput.value = btn.dataset.type;
+      if (btn.dataset.type === 'schedule') { scheduleFields.style.display = ''; nowNote.style.display = 'none'; }
+      else { scheduleFields.style.display = 'none'; nowNote.style.display = ''; }
+    });
+  });
+})();
+</script>{% endblock %}

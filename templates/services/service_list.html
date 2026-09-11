@@ -1,0 +1,64 @@
+{% extends "base.html" %}{% load service_extras %}{% block title %}Find Services — Sahyog{% endblock %}{% block content %}
+<section class="marketplace"><div class="container"><div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4"><div><span class="eyebrow">Marketplace</span><h1 class="page-title">Find trusted local help.</h1><p class="text-muted mb-0">Verified providers, clear pricing and smart matching.</p></div></div>
+<div class="search-shell"><form method="get" id="searchForm"><div class="row g-2"><div class="col-lg-6"><div class="input-group input-group-lg"><span class="input-group-text"><i class="bi bi-search"></i></span><input name="q" value="{{ query }}" class="form-control" placeholder="Electrician, plumber, cleaner..."></div></div><div class="col-lg-4"><select name="category" class="form-select form-select-lg"><option value="">All categories</option>{% for value,label in categories %}<option value="{{ value }}" {% if category == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div><div class="col-lg-2"><button class="btn btn-primary-custom btn-lg w-100 rounded-3">Search</button></div></div><div class="d-flex gap-2 mt-2" role="group"><button type="button" class="btn btn-sm btn-outline-dark rounded-3 booking-type-btn {% if booking_type != 'schedule' %}active{% endif %}" data-type="now"><i class="bi bi-lightning-charge me-1"></i> Book Now</button><button type="button" class="btn btn-sm btn-outline-dark rounded-3 booking-type-btn {% if booking_type == 'schedule' %}active{% endif %}" data-type="schedule"><i class="bi bi-calendar-week me-1"></i> Schedule</button></div><div class="row g-2 mt-1" id="scheduleFieldsRow" style="{% if booking_type != 'schedule' %}display:none{% endif %}"><div class="col-6 col-lg-3"><input type="date" name="sched_date" value="{{ sched_date }}" class="form-control"></div><div class="col-6 col-lg-3"><input type="time" name="sched_time" value="{{ sched_time }}" class="form-control"></div></div>{% if schedule_error %}<div class="text-danger small mt-2">{{ schedule_error }}</div>{% endif %}<input type="hidden" name="booking_type" id="bookingTypeInput" value="{{ booking_type|default:'now' }}"><input type="hidden" name="lat" id="userLat" value="{{ user_lat|default:'' }}"><input type="hidden" name="lng" id="userLng" value="{{ user_lng|default:'' }}"></form></div>
+<div class="mb-3"><label class="form-label fw-semibold">Select Service Location</label><div class="d-flex gap-2 flex-wrap mb-2"><button class="btn btn-dark rounded-4" type="button" id="locateBtn"><i class="bi bi-crosshair me-2"></i>Use my location</button><span id="selectedCoords" class="small text-muted align-self-center">{% if user_lat %}Location selected — results are filtered to within {{ radius_km|floatformat:0 }} km.{% else %}Click the map or use your location to see nearby workers.{% endif %}</span></div><div id="nearbyMap" class="rounded-4" style="height:340px;border:1px solid var(--line)"></div></div>
+<div class="d-flex justify-content-between align-items-center mt-5 mb-3"><div><strong>{{ services|length }}</strong> workers within {{ radius_km|floatformat:0 }} km{% if booking_type == 'schedule' and sched_date %} for {{ sched_date }} {{ sched_time }}{% endif %}</div><span class="small text-muted">Verified providers are prioritized</span></div>
+<div class="row g-4">{% for service in services %}<div class="col-md-6 col-xl-4"><article class="market-card h-100"><div class="d-flex justify-content-between align-items-start"><div class="category-icon category-{{ service.category }}"><i class="bi {{ service.category|category_icon }}"></i></div>{% if service.worker.workerprofile.is_verified %}<span class="verified-pill"><i class="bi bi-patch-check-fill"></i> Verified</span>{% else %}<span class="pending-pill">Verification pending</span>{% endif %}</div><h4 class="mt-4 mb-2">{{ service.name }}</h4><p class="text-muted small">{{ service.description|default:"Professional home & community service."|truncatechars:100 }}</p><div class="worker-line"><div class="avatar sm">{{ service.worker.first_name|default:service.worker.username|slice:':1'|upper }}</div><div class="flex-grow-1"><strong>{{ service.worker.get_full_name|default:service.worker.username }}</strong><div class="small text-muted">{{ service.category|title }} · {{ service.experience }} yrs</div></div>{% if service.worker.workerprofile.rating %}<span>★ {{ service.worker.workerprofile.rating }}</span>{% endif %}</div><div class="distance-line"><i class="bi bi-geo-alt"></i> {{ service.distance_km|format_distance }}{% if service.eta_minutes %} <span>·</span> <i class="bi bi-clock"></i> {{ service.eta_minutes|format_eta }}{% endif %}</div><div class="small mt-1">{% if service.worker.workerprofile.is_available %}<span class="text-success"><i class="bi bi-circle-fill" style="font-size:.5rem"></i> Available</span>{% else %}<span class="text-muted"><i class="bi bi-circle-fill" style="font-size:.5rem"></i> Unavailable</span>{% endif %}</div><div class="d-flex justify-content-between align-items-end mt-4"><div><small class="text-muted">Starting from</small><div class="price">₹{{ service.base_price }}</div></div>{% if service.worker.workerprofile.is_verified %}<div class="d-flex gap-2"><a href="{% url 'services:create_booking' service.id %}?booking_type={{ booking_type|default:'now' }}{% if user_lat %}&lat={{ user_lat }}&lng={{ user_lng }}{% endif %}{% if sched_date %}&sched_date={{ sched_date }}&sched_time={{ sched_time }}{% endif %}" class="btn btn-dark rounded-3 px-3">Select Worker <i class="bi bi-arrow-right ms-1"></i></a><a href="{% url 'services:create_booking' service.id %}?emergency=1{% if user_lat %}&lat={{ user_lat }}&lng={{ user_lng }}{% endif %}" class="btn btn-outline-danger rounded-3" title="Emergency"><i class="bi bi-lightning-charge-fill"></i></a></div>{% else %}<button class="btn btn-light rounded-3" disabled>Not bookable</button>{% endif %}</div></article></div>{% empty %}<div class="col-12"><div class="empty-card text-center"><div class="feature-icon mx-auto"><i class="bi bi-search"></i></div>{% if no_workers_reason == "no_location" %}<h3>Select your service location</h3><p class="text-muted">Use the map above to choose where you need help — we'll show verified workers within {{ radius_km|floatformat:0 }} km.</p>{% elif no_workers_reason == "none_available_at_time" %}<h3>No workers are available for this date and time within {{ radius_km|floatformat:0 }} km.</h3><p class="text-muted">Try a different time, date, or service location.</p>{% elif no_workers_reason == "none_within_radius" %}<h3>No verified workers found within {{ radius_km|floatformat:0 }} km.</h3><p class="text-muted">Try changing your service location or selecting another service.</p>{% else %}<h3>No matching services</h3><p class="text-muted">Try another category or search term.</p>{% endif %}</div></div>{% endfor %}</div></div></section>
+{% endblock %}{% block extra_head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}{% block extra_js %}<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+(function(){
+  var latField = document.getElementById('userLat');
+  var lngField = document.getElementById('userLng');
+  var coordsLabel = document.getElementById('selectedCoords');
+  var hasLat = parseFloat("{{ user_lat|default:'' }}");
+  var hasLng = parseFloat("{{ user_lng|default:'' }}");
+  var startLat = !isNaN(hasLat) ? hasLat : 22.9734;
+  var startLng = !isNaN(hasLng) ? hasLng : 78.6569;
+  var markers = {{ map_markers_json|safe }};
+
+  var map = L.map('nearbyMap').setView([startLat, startLng], !isNaN(hasLat) ? 13 : 5);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var picker = null;
+  function setSelected(lat, lng, submit) {
+    lat = Math.round(lat * 1e6) / 1e6; lng = Math.round(lng * 1e6) / 1e6;
+    latField.value = lat; lngField.value = lng;
+    coordsLabel.textContent = 'Selected: ' + lat + ', ' + lng;
+    if (picker) { picker.setLatLng([lat, lng]); }
+    else { picker = L.marker([lat, lng], {draggable: true}).addTo(map); picker.on('dragend', function(){ var p = picker.getLatLng(); setSelected(p.lat, p.lng, true); }); }
+    if (submit) document.getElementById('searchForm').submit();
+  }
+
+  if (!isNaN(hasLat) && !isNaN(hasLng)) setSelected(hasLat, hasLng, false);
+
+  map.on('click', function(e){ setSelected(e.latlng.lat, e.latlng.lng, true); });
+
+  markers.forEach(function(m){
+    var icon = L.divIcon({className: '', html: '<div style="background:' + (m.verified ? '#0d9488' : '#9a6400') + ';width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px ' + (m.verified ? '#0d9488' : '#9a6400') + '"></div>'});
+    L.marker([m.lat, m.lng], {icon: icon}).addTo(map).bindPopup(
+      '<strong>' + m.name + '</strong><br>' + m.service + (m.distance != null ? '<br>' + m.distance + ' km away' : '') + (m.verified ? '<br><span style="color:#0d9488">Verified</span>' : '')
+    );
+  });
+
+  document.getElementById('locateBtn')?.addEventListener('click', function(){
+    if (!navigator.geolocation) return alert('Location is not supported by this browser.');
+    navigator.geolocation.getCurrentPosition(function(p){
+      setSelected(p.coords.latitude, p.coords.longitude, false);
+      map.setView([p.coords.latitude, p.coords.longitude], 14);
+      document.getElementById('searchForm').submit();
+    }, function(){ alert('Please allow location access, or click the map to select your location manually.'); });
+  });
+
+  var typeInput = document.getElementById('bookingTypeInput');
+  var scheduleRow = document.getElementById('scheduleFieldsRow');
+  document.querySelectorAll('.booking-type-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.booking-type-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      typeInput.value = btn.dataset.type;
+      scheduleRow.style.display = btn.dataset.type === 'schedule' ? '' : 'none';
+    });
+  });
+})();
+</script>{% endblock %}

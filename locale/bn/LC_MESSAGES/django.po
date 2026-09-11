@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sahyog 1.0\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Choose language"
+msgstr "ভাষা বেছে নিন"
+
+msgid "Hi, %(name)s"
+msgstr "নমস্কার, %(name)s"
+
+msgid "Logout"
+msgstr "লগ আউট"
+
+msgid "Login"
+msgstr "লগইন"
+
+msgid "Get Started"
+msgstr "শুরু করুন"
+
+msgid "Home"
+msgstr "হোম"
+
+msgid "Find Workers"
+msgstr "কর্মী খুঁজুন"
+
+msgid "Dashboard"
+msgstr "ড্যাশবোর্ড"
+
+msgid "Cooperative"
+msgstr "সমবায়"
+
+msgid "Cooperative administrator"
+msgstr "সমবায় প্রশাসক"
+
+msgid "Worker account"
+msgstr "কর্মী অ্যাকাউন্ট"
+
+msgid "Customer account"
+msgstr "গ্রাহক অ্যাকাউন্ট"
+
+msgid "Welcome to Sahyog"
+msgstr "সহযোগে স্বাগতম"
+
+msgid "Trusted local services"
+msgstr "বিশ্বস্ত স্থানীয় পরিষেবা"
+
+msgid "Worker Dashboard"
+msgstr "কর্মী ড্যাশবোর্ড"
+
+msgid "My Profile"
+msgstr "আমার প্রোফাইল"
+
+msgid "My Services"
+msgstr "আমার পরিষেবা"
+
+msgid "Welfare & Protection"
+msgstr "কল্যাণ ও সুরক্ষা"
+
+msgid "My Dashboard"
+msgstr "আমার ড্যাশবোর্ড"
+
+msgid "My Bookings"
+msgstr "আমার বুকিং"
+
+msgid "Cooperative Control Center"
+msgstr "সমবায় নিয়ন্ত্রণ কেন্দ্র"
+
+msgid "Django Admin"
+msgstr "জ্যাঙ্গো অ্যাডমিন"
+
+msgid "Create Account"
+msgstr "অ্যাকাউন্ট তৈরি করুন"
+
+msgid "Cooperative-owned · Verified local network"
+msgstr "সমবায়-মালিকানাধীন · যাচাইকৃত স্থানীয় নেটওয়ার্ক"
+
+msgid "A cooperative-owned service network connecting communities with trusted local workers."
+msgstr "একটি সমবায়-মালিকানাধীন পরিষেবা নেটওয়ার্ক যা সম্প্রদায়কে বিশ্বস্ত স্থানীয় কর্মীদের সাথে যুক্ত করে।"
+
+msgid "Platform"
+msgstr "প্ল্যাটফর্ম"
+
+msgid "Find workers"
+msgstr "কর্মী খুঁজুন"
+
+msgid "Services"
+msgstr "পরিষেবা"
+
+msgid "How it works"
+msgstr "এটি কীভাবে কাজ করে"
+
+msgid "Workers"
+msgstr "কর্মীরা"
+
+msgid "Join Sahyog"
+msgstr "সহযোগে যোগ দিন"
+
+msgid "Worker login"
+msgstr "কর্মী লগইন"
+
+msgid "Benefits"
+msgstr "সুবিধা"
+
+msgid "Trust"
+msgstr "বিশ্বাস"
+
+msgid "Verification"
+msgstr "যাচাইকরণ"
+
+msgid "Worker welfare"
+msgstr "কর্মী কল্যাণ"
+
+msgid "Community"
+msgstr "সম্প্রদায়"
+
+msgid "Built for community empowerment."
+msgstr "সম্প্রদায়ের ক্ষমতায়নের জন্য তৈরি।"
+
+msgid "Sahyog — Trusted Local Services"
+msgstr "সহযোগ — বিশ্বস্ত স্থানীয় পরিষেবা"
+
+msgid "Cooperative-powered local services"
+msgstr "সমবায়-চালিত স্থানীয় পরিষেবা"
+
+msgid "Reliable help."
+msgstr "নির্ভরযোগ্য সহায়তা।"
+
+msgid "Closer to home."
+msgstr "বাড়ির কাছাকাছি।"
+
+msgid "Find verified electricians, plumbers, drivers, cleaners and more — while keeping opportunity and value inside the local worker community."
+msgstr "যাচাইকৃত ইলেকট্রিশিয়ান, প্লাম্বার, চালক, পরিচ্ছন্নতাকর্মী এবং আরও অনেক কর্মী খুঁজুন — এবং সুযোগ ও মূল্য স্থানীয় কর্মী সম্প্রদায়ের মধ্যেই রাখুন।"
+
+msgid "Find a worker"
+msgstr "একজন কর্মী খুঁজুন"
+
+msgid "Become a worker"
+msgstr "একজন কর্মী হন"
+
+msgid "Dark Mode"
+msgstr "ডার্ক মোড"
+
+msgid "Toggle theme"
+msgstr "থিম পরিবর্তন করুন"
+
+msgid "Auto"
+msgstr "স্বয়ংক্রিয়"

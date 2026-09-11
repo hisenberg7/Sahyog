@@ -1,0 +1,27 @@
+SAHYOG MVP — WINDOWS QUICK START
+
+1. Open this folder in VS Code. Make sure manage.py is visible in the Explorer.
+2. Open Terminal.
+3. Create and activate a virtual environment:
+   python -m venv venv
+   venv\Scripts\activate
+4. Install dependencies:
+   python -m pip install -r requirements.txt
+5. Create the database:
+   python manage.py migrate
+6. Optional: create realistic demo workers + cooperative admin + customer:
+   python manage.py seed_demo
+   Default demo password: Demo@12345
+7. Start:
+   python manage.py runserver
+8. Open:
+   http://127.0.0.1:8000/
+
+Demo accounts (after seed_demo):
+- Customer: customer_demo / Demo@12345
+- Worker: rahul_demo / Demo@12345
+- Worker: priya_demo / Demo@12345
+- Worker: aman_demo / Demo@12345
+- Cooperative admin: cooperative_admin / Demo@12345
+
+For your own API keys, copy .env.example to .env and add values. Core MVP works without Mapbox/Razorpay keys.

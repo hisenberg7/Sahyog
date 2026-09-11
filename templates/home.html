@@ -1,0 +1,1399 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Sahyog — Trusted Local Services" %}{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =========================================================
+       SAHYOG HOME — RESPONSIVE PHOTO UPGRADE
+       ========================================================= */
+
+    .sahyog-how {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sahyog-how .section-heading {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* =========================================================
+       PHOTO CARDS
+       ========================================================= */
+
+    .sahyog-photo-card {
+        position: relative;
+        height: 390px;
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0b1715;
+        isolation: isolate;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+        transition:
+            transform 0.3s ease,
+            border-color 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+
+    .sahyog-photo-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(25, 181, 165, 0.55);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /*
+       Actual image.
+       object-fit: cover keeps the card filled without stretching.
+       We use a slightly zoomed-out presentation so more of the
+       original photo remains visible.
+    */
+
+    .sahyog-photo-card .card-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        z-index: -3;
+        transform: scale(1);
+        transition: transform 0.5s ease;
+    }
+
+    .sahyog-photo-card:hover .card-photo {
+        transform: scale(1.025);
+    }
+
+    /*
+       Light overlay.
+       Earlier version was too dark and made the photos look blurry.
+    */
+
+    .sahyog-photo-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(3, 15, 13, 0.03) 0%,
+                rgba(3, 15, 13, 0.08) 30%,
+                rgba(3, 15, 13, 0.42) 57%,
+                rgba(3, 15, 13, 0.88) 82%,
+                rgba(3, 15, 13, 0.97) 100%
+            );
+    }
+
+    /*
+       Small cinematic highlight
+    */
+
+    .sahyog-photo-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                120deg,
+                rgba(255,255,255,0.08),
+                transparent 30%,
+                transparent 72%,
+                rgba(25,181,165,0.04)
+            );
+    }
+
+    .sahyog-photo-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 25px;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* =========================================================
+       TOP AREA
+       ========================================================= */
+
+    .sahyog-photo-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .sahyog-photo-icon {
+        width: 56px;
+        height: 56px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 17px;
+
+        background: rgba(5, 55, 51, 0.90);
+        border: 1px solid rgba(25, 181, 165, 0.45);
+
+        color: #19d1bd;
+
+        font-size: 25px;
+
+        box-shadow:
+            0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .sahyog-photo-number {
+        font-size: 18px;
+        font-weight: 800;
+        color: rgba(255,255,255,0.88);
+    }
+
+    /* =========================================================
+       SAHYOG BRAND
+       ========================================================= */
+
+    .sahyog-photo-brand {
+        position: absolute;
+
+        top: 25px;
+        left: 94px;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 7px 11px;
+
+        border-radius: 999px;
+
+        background: rgba(4, 20, 18, 0.65);
+        border: 1px solid rgba(255,255,255,0.16);
+
+        color: #fff;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .sahyog-photo-brand i {
+        color: #19d1bd;
+    }
+
+    /* =========================================================
+       CONTENT
+       ========================================================= */
+
+    .sahyog-photo-bottom {
+        margin-top: auto;
+        padding-right: 5px;
+    }
+
+    .sahyog-photo-bottom h4 {
+        margin: 0 0 9px;
+
+        color: #fff;
+
+        font-size: 27px;
+        font-weight: 800;
+
+        letter-spacing: -0.025em;
+    }
+
+    .sahyog-photo-bottom p {
+        margin: 0;
+
+        max-width: 370px;
+
+        color: rgba(255,255,255,0.84);
+
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* =========================================================
+       TAGS
+       ========================================================= */
+
+    .sahyog-photo-tags {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 7px;
+
+        margin-top: 18px;
+
+        padding-right: 55px;
+    }
+
+    .sahyog-photo-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 7px 10px;
+
+        border-radius: 999px;
+
+        background: rgba(3, 23, 21, 0.72);
+
+        border: 1px solid rgba(255,255,255,0.16);
+
+        color: rgba(255,255,255,0.92);
+
+        font-size: 11px;
+
+        white-space: nowrap;
+
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
+    }
+
+    .sahyog-photo-tag i {
+        color: #19d1bd;
+    }
+
+    /* =========================================================
+       ARROW
+       ========================================================= */
+
+    .sahyog-photo-arrow {
+        position: absolute;
+
+        right: 24px;
+        bottom: 24px;
+
+        width: 48px;
+        height: 48px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,0.15);
+
+        border: 1px solid rgba(255,255,255,0.22);
+
+        color: #fff;
+
+        font-size: 19px;
+
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+
+        transition:
+            background 0.25s ease,
+            border-color 0.25s ease,
+            transform 0.25s ease;
+    }
+
+    .sahyog-photo-card:hover .sahyog-photo-arrow {
+        background: rgba(25,181,165,0.35);
+        border-color: rgba(25,181,165,0.65);
+        transform: translateX(3px);
+    }
+
+    /* =========================================================
+       TRUST SECTION
+       ========================================================= */
+
+    .sahyog-trust {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sahyog-trust::after {
+        content: "";
+
+        position: absolute;
+
+        right: -120px;
+        bottom: -160px;
+
+        width: 430px;
+        height: 430px;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(25,181,165,0.10),
+                transparent 68%
+            );
+
+        pointer-events: none;
+    }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 991.98px) {
+
+        .sahyog-photo-card {
+            height: 370px;
+        }
+
+        .sahyog-photo-bottom h4 {
+            font-size: 25px;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 767.98px) {
+
+        .sahyog-how {
+            padding-top: 55px;
+            padding-bottom: 55px;
+        }
+
+        .sahyog-how .section-heading {
+            margin-bottom: 28px;
+        }
+
+        /*
+           One full card per row.
+        */
+
+        .sahyog-photo-card {
+            width: 100%;
+            height: 365px;
+
+            border-radius: 21px;
+        }
+
+        .sahyog-photo-content {
+            padding: 21px;
+        }
+
+        .sahyog-photo-icon {
+            width: 51px;
+            height: 51px;
+
+            border-radius: 15px;
+
+            font-size: 23px;
+        }
+
+        .sahyog-photo-brand {
+            top: 21px;
+            left: 84px;
+        }
+
+        .sahyog-photo-number {
+            font-size: 17px;
+        }
+
+        .sahyog-photo-bottom {
+            padding-right: 2px;
+        }
+
+        .sahyog-photo-bottom h4 {
+            font-size: 23px;
+        }
+
+        .sahyog-photo-bottom p {
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .sahyog-photo-tags {
+            margin-top: 15px;
+            padding-right: 52px;
+        }
+
+        .sahyog-photo-arrow {
+            right: 19px;
+            bottom: 19px;
+
+            width: 44px;
+            height: 44px;
+        }
+
+        /*
+           Hero mobile improvements
+        */
+
+        .hero-premium .hero-card {
+            margin-top: 5px;
+        }
+
+        .hero-premium .hero-copy {
+            font-size: 15px;
+        }
+
+        .hero-premium .btn {
+            width: 100%;
+        }
+
+        .hero-trust {
+            flex-direction: column;
+            align-items: flex-start;
+
+            gap: 9px !important;
+        }
+
+        .sahyog-trust {
+            padding-top: 55px;
+            padding-bottom: 55px;
+        }
+
+        .impact-card {
+            margin-top: 4px;
+        }
+    }
+
+    /* =========================================================
+       SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 380px) {
+
+        .sahyog-photo-card {
+            height: 350px;
+        }
+
+        .sahyog-photo-content {
+            padding: 18px;
+        }
+
+        .sahyog-photo-brand {
+            left: 78px;
+            top: 18px;
+        }
+
+        .sahyog-photo-bottom h4 {
+            font-size: 21px;
+        }
+
+        .sahyog-photo-bottom p {
+            font-size: 13px;
+        }
+
+        .sahyog-photo-tags {
+            gap: 5px;
+        }
+
+        .sahyog-photo-tag {
+            padding: 6px 8px;
+            font-size: 10px;
+        }
+
+        .sahyog-photo-arrow {
+            right: 17px;
+            bottom: 17px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero-premium">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-7">
+
+                <span class="eyebrow">
+
+                    <i class="bi bi-patch-check-fill"></i>
+
+                    {% trans "Cooperative-powered local services" %}
+
+                </span>
+
+
+                <h1>
+
+                    {% trans "Reliable help." %}
+
+                    <br>
+
+                    <span>
+                        {% trans "Closer to home." %}
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-copy">
+
+                    {% trans "Find verified electricians, plumbers, drivers, cleaners and more — while keeping opportunity and value inside the local worker community." %}
+
+                </p>
+
+
+                <div class="d-flex flex-wrap gap-3">
+
+                    <a
+                        href="{% url 'services:service_list' %}"
+                        class="btn btn-primary-custom btn-lg rounded-4 px-4"
+                    >
+
+                        {% trans "Find a worker" %}
+
+                        <i class="bi bi-arrow-right ms-2"></i>
+
+                    </a>
+
+
+                    {% if not user.is_authenticated %}
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="btn btn-outline-dark btn-lg rounded-4 px-4"
+                    >
+
+                        {% trans "Become a worker" %}
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="hero-trust mt-4">
+
+                    <span>
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Verified profiles
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        Smart local matching
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="bi bi-heart"></i>
+
+                        Worker welfare
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="hero-card">
+
+                    <div class="floating-chip chip-top">
+
+                        <i class="bi bi-lightning-charge-fill"></i>
+
+                        Emergency ready
+
+                    </div>
+
+
+                    <div class="hero-card-head">
+
+                        <div>
+
+                            <span class="small text-muted">
+
+                                Popular near you
+
+                            </span>
+
+
+                            <h4>
+
+                                Home Electrical Repair
+
+                            </h4>
+
+                        </div>
+
+
+                        <span class="verified-pill">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Verified
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="worker-mini">
+
+                        <div class="avatar">
+
+                            RK
+
+                        </div>
+
+
+                        <div class="flex-grow-1">
+
+                            <strong>
+
+                                Rahul Kumar
+
+                            </strong>
+
+
+                            <div class="small text-muted">
+
+                                Electrician · 5 yrs · ★ 4.9
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="distance">
+
+                            1.8 km
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="match-meter">
+
+                        <div>
+
+                            <span>
+
+                                Match score
+
+                            </span>
+
+                            <strong>
+
+                                94%
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                style="width:94%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="hero-price">
+
+                        <span>
+
+                            Starting from
+
+                        </span>
+
+
+                        <strong>
+
+                            ₹499
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="floating-chip chip-bottom">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        Community-owned network
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+     ========================================================= -->
+
+<section
+    class="section sahyog-how"
+    id="how-it-works"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="eyebrow">
+
+                How it works
+
+            </span>
+
+
+            <h2>
+
+                From request to resolution.
+
+            </h2>
+
+
+            <p>
+
+                Designed around trust, speed and fair opportunity.
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 CARD 01 — CHOOSE SERVICE
+                 ================================================= -->
+
+            <div class="col-md-4">
+
+                <div class="sahyog-photo-card">
+
+                    <img
+                        src="{% static 'images/choose_service_bg.jpg' %}"
+                        alt="Choose a service"
+                        class="card-photo"
+                        loading="lazy"
+                    >
+
+
+                    <div class="sahyog-photo-content">
+
+
+                        <div class="sahyog-photo-top">
+
+                            <div class="sahyog-photo-icon">
+
+                                <i class="bi bi-search"></i>
+
+                            </div>
+
+
+                            <span class="sahyog-photo-number">
+
+                                01
+
+                            </span>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-brand">
+
+                            <i class="bi bi-people-fill"></i>
+
+                            Sahyog
+
+                        </span>
+
+
+                        <div class="sahyog-photo-bottom">
+
+                            <h4>
+
+                                Choose a service
+
+                            </h4>
+
+
+                            <p>
+
+                                Search by skill, rating, availability and location.
+
+                            </p>
+
+
+                            <div class="sahyog-photo-tags">
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-wrench-adjustable"></i>
+
+                                    Plumbing
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-lightning-charge-fill"></i>
+
+                                    Electrical
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-stars"></i>
+
+                                    Cleaning
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-arrow">
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CARD 02 — MATCH WITH TRUST
+                 ================================================= -->
+
+            <div class="col-md-4">
+
+                <div class="sahyog-photo-card">
+
+                    <img
+                        src="{% static 'images/match_trust_bg.jpg' %}"
+                        alt="Match with a trusted worker"
+                        class="card-photo"
+                        loading="lazy"
+                    >
+
+
+                    <div class="sahyog-photo-content">
+
+
+                        <div class="sahyog-photo-top">
+
+                            <div class="sahyog-photo-icon">
+
+                                <i class="bi bi-person-check"></i>
+
+                            </div>
+
+
+                            <span class="sahyog-photo-number">
+
+                                02
+
+                            </span>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-brand">
+
+                            <i class="bi bi-patch-check-fill"></i>
+
+                            Sahyog
+
+                        </span>
+
+
+                        <div class="sahyog-photo-bottom">
+
+                            <h4>
+
+                                Match with trust
+
+                            </h4>
+
+
+                            <p>
+
+                                Verified workers are ranked using availability, rating and proximity.
+
+                            </p>
+
+
+                            <div class="sahyog-photo-tags">
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                    Verified
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    Rated
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-geo-alt-fill"></i>
+
+                                    Nearby
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-arrow">
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CARD 03 — BOOK & REVIEW
+                 ================================================= -->
+
+            <div class="col-md-4">
+
+                <div class="sahyog-photo-card">
+
+                    <img
+                        src="{% static 'images/book_review_bg.jpg' %}"
+                        alt="Book service and leave a review"
+                        class="card-photo"
+                        loading="lazy"
+                    >
+
+
+                    <div class="sahyog-photo-content">
+
+
+                        <div class="sahyog-photo-top">
+
+                            <div class="sahyog-photo-icon">
+
+                                <i class="bi bi-check2-circle"></i>
+
+                            </div>
+
+
+                            <span class="sahyog-photo-number">
+
+                                03
+
+                            </span>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-brand">
+
+                            <i class="bi bi-heart-fill"></i>
+
+                            Sahyog
+
+                        </span>
+
+
+                        <div class="sahyog-photo-bottom">
+
+                            <h4>
+
+                                Book &amp; review
+
+                            </h4>
+
+
+                            <p>
+
+                                Track the job, pay securely and leave feedback after completion.
+
+                            </p>
+
+
+                            <div class="sahyog-photo-tags">
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-credit-card"></i>
+
+                                    Secure pay
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    Live tracking
+
+                                </span>
+
+
+                                <span class="sahyog-photo-tag">
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    Review
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="sahyog-photo-arrow">
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRUST LAYER
+     ========================================================= -->
+
+<section
+    class="section soft sahyog-trust"
+    id="trust"
+>
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+
+            <div class="col-lg-6">
+
+                <span class="eyebrow">
+
+                    Trust layer
+
+                </span>
+
+
+                <h2>
+
+                    Not just a marketplace. A safer worker network.
+
+                </h2>
+
+
+                <p class="lead text-muted">
+
+                    Worker verification, transparent reviews and cooperative oversight make every interaction more accountable.
+
+                </p>
+
+
+                <div class="trust-list">
+
+
+                    <div>
+
+                        <i class="bi bi-patch-check-fill"></i>
+
+
+                        <span>
+
+                            <b>
+
+                                Verified workers
+
+                            </b>
+
+
+                            <small>
+
+                                Certification/document review by the cooperative.
+
+                            </small>
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="bi bi-star-fill"></i>
+
+
+                        <span>
+
+                            <b>
+
+                                Real feedback
+
+                            </b>
+
+
+                            <small>
+
+                                Ratings are tied to completed bookings.
+
+                            </small>
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="bi bi-receipt"></i>
+
+
+                        <span>
+
+                            <b>
+
+                                Transparent payments
+
+                            </b>
+
+
+                            <small>
+
+                                UPI reference + invoice trail for every job.
+
+                            </small>
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="impact-card">
+
+                    <div class="impact-grid">
+
+
+                        <div>
+
+                            <strong>
+
+                                {{ verified_worker_count|default:"0" }}
+
+                            </strong>
+
+
+                            <span>
+
+                                verified workers
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                24/7
+
+                            </strong>
+
+
+                            <span>
+
+                                emergency-ready workflow
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                100%
+
+                            </strong>
+
+
+                            <span>
+
+                                cooperative oversight
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                ₹
+
+                            </strong>
+
+
+                            <span>
+
+                                value stays local
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     WORKER CTA
+     ========================================================= -->
+
+<section
+    class="section"
+    id="welfare"
+>
+
+    <div class="container">
+
+        <div class="cta-card">
+
+
+            <div>
+
+                <span class="eyebrow">
+
+                    Worker first
+
+                </span>
+
+
+                <h2>
+
+                    Earn more. Stay protected.
+
+                </h2>
+
+
+                <p>
+
+                    Bring skills online, build a trusted profile and access cooperative welfare support.
+
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'register' %}"
+                class="btn btn-light btn-lg rounded-4 px-4"
+            >
+
+                Join the network
+
+                <i class="bi bi-arrow-up-right ms-2"></i>
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

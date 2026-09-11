@@ -1,0 +1,142 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sahyog 1.0\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Choose language"
+msgstr "भाषा चुनें"
+
+msgid "Hi, %(name)s"
+msgstr "नमस्ते, %(name)s"
+
+msgid "Logout"
+msgstr "लॉगआउट"
+
+msgid "Login"
+msgstr "लॉगिन"
+
+msgid "Get Started"
+msgstr "शुरू करें"
+
+msgid "Home"
+msgstr "होम"
+
+msgid "Find Workers"
+msgstr "कामगार खोजें"
+
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+msgid "Cooperative"
+msgstr "सहकारी समिति"
+
+msgid "Cooperative administrator"
+msgstr "सहकारी प्रशासक"
+
+msgid "Worker account"
+msgstr "कामगार खाता"
+
+msgid "Customer account"
+msgstr "ग्राहक खाता"
+
+msgid "Welcome to Sahyog"
+msgstr "सहयोग में आपका स्वागत है"
+
+msgid "Trusted local services"
+msgstr "भरोसेमंद स्थानीय सेवाएं"
+
+msgid "Worker Dashboard"
+msgstr "कामगार डैशबोर्ड"
+
+msgid "My Profile"
+msgstr "मेरी प्रोफ़ाइल"
+
+msgid "My Services"
+msgstr "मेरी सेवाएं"
+
+msgid "Welfare & Protection"
+msgstr "कल्याण एवं सुरक्षा"
+
+msgid "My Dashboard"
+msgstr "मेरा डैशबोर्ड"
+
+msgid "My Bookings"
+msgstr "मेरी बुकिंग"
+
+msgid "Cooperative Control Center"
+msgstr "सहकारी नियंत्रण केंद्र"
+
+msgid "Django Admin"
+msgstr "डिजैंगो व्यवस्थापक"
+
+msgid "Create Account"
+msgstr "खाता बनाएं"
+
+msgid "Cooperative-owned · Verified local network"
+msgstr "सहकारी-स्वामित्व · सत्यापित स्थानीय नेटवर्क"
+
+msgid "A cooperative-owned service network connecting communities with trusted local workers."
+msgstr "एक सहकारी-स्वामित्व वाला सेवा नेटवर्क जो समुदायों को भरोसेमंद स्थानीय कामगारों से जोड़ता है।"
+
+msgid "Platform"
+msgstr "प्लेटफ़ॉर्म"
+
+msgid "Find workers"
+msgstr "कामगार खोजें"
+
+msgid "Services"
+msgstr "सेवाएं"
+
+msgid "How it works"
+msgstr "यह कैसे काम करता है"
+
+msgid "Workers"
+msgstr "कामगार"
+
+msgid "Join Sahyog"
+msgstr "सहयोग से जुड़ें"
+
+msgid "Worker login"
+msgstr "कामगार लॉगिन"
+
+msgid "Benefits"
+msgstr "लाभ"
+
+msgid "Trust"
+msgstr "भरोसा"
+
+msgid "Verification"
+msgstr "सत्यापन"
+
+msgid "Worker welfare"
+msgstr "कामगार कल्याण"
+
+msgid "Community"
+msgstr "समुदाय"
+
+msgid "Built for community empowerment."
+msgstr "समुदाय के सशक्तिकरण के लिए निर्मित।"
+
+msgid "Sahyog — Trusted Local Services"
+msgstr "सहयोग — भरोसेमंद स्थानीय सेवाएं"
+
+msgid "Cooperative-powered local services"
+msgstr "सहकारी-संचालित स्थानीय सेवाएं"
+
+msgid "Reliable help."
+msgstr "विश्वसनीय सहायता।"
+
+msgid "Closer to home."
+msgstr "घर के करीब।"
+
+msgid "Find verified electricians, plumbers, drivers, cleaners and more — while keeping opportunity and value inside the local worker community."
+msgstr "सत्यापित इलेक्ट्रीशियन, प्लंबर, ड्राइवर, सफाई कर्मी और अन्य कामगार खोजें — और अवसर व मूल्य स्थानीय कामगार समुदाय में ही बनाए रखें।"
+
+msgid "Find a worker"
+msgstr "कामगार खोजें"
+
+msgid "Become a worker"
+msgstr "कामगार बनें"
